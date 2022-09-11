@@ -1,0 +1,11 @@
+.body {
+    -fx-background-color:#395135
+}
+
+.anchorPane {
+    -fx-background-color:#9aaf96
+}
+
+.tab:selected {
+    -fx-background-color:gold
+}

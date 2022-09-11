@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="361.0" prefWidth="556.0" styleClass="anchorPane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.contactAdd">
+   <children>
+      <Pane layoutX="-8.0" layoutY="-9.0" prefHeight="62.0" prefWidth="565.0" styleClass="body">
+         <children>
+            <Label layoutX="219.0" layoutY="16.0" text="Add Customer" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Label layoutX="56.0" layoutY="77.0" prefHeight="17.0" prefWidth="38.0" text="Name:" />
+      <Label layoutX="56.0" layoutY="107.0" prefHeight="17.0" prefWidth="38.0" text="Street:" />
+      <Label layoutX="65.0" layoutY="138.0" prefHeight="17.0" prefWidth="26.0" text="City:" />
+      <Label layoutX="40.0" layoutY="168.0" prefHeight="17.0" prefWidth="56.0" text="Zip Code:" />
+      <Label layoutX="60.0" layoutY="199.0" prefHeight="17.0" prefWidth="32.0" text="State:" />
+      <Label layoutX="45.0" layoutY="231.0" prefHeight="17.0" prefWidth="49.0" text="Country:" />
+      <Label layoutX="32.0" layoutY="263.0" prefHeight="17.0" prefWidth="68.0" text="Telephone:" />
+      <TextField fx:id="addName" layoutX="94.0" layoutY="73.0" prefHeight="25.0" prefWidth="374.0" />
+      <TextField fx:id="addStreet" layoutX="94.0" layoutY="103.0" prefHeight="25.0" prefWidth="374.0" />
+      <TextField fx:id="addCity" layoutX="94.0" layoutY="134.0" prefHeight="25.0" prefWidth="374.0" />
+      <TextField fx:id="addZip" layoutX="94.0" layoutY="164.0" prefHeight="25.0" prefWidth="374.0" />
+      <ComboBox fx:id="addState" layoutX="94.0" layoutY="195.0" prefWidth="150.0" />
+      <ComboBox fx:id="addCountry" layoutX="94.0" layoutY="227.0" prefWidth="150.0" />
+      <TextField fx:id="addTel" layoutX="94.0" layoutY="259.0" prefHeight="25.0" prefWidth="374.0" />
+      <Button fx:id="saveAddCustBtn" layoutX="143.0" layoutY="317.0" mnemonicParsing="false" onAction="#saveAddCust" text="Save" />
+      <Button fx:id="cancelAddCustBtn" layoutX="363.0" layoutY="317.0" mnemonicParsing="false" onAction="#cancelAddCust" text="Cancel" />
+   </children>
+</AnchorPane>
