@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="361.0" prefWidth="556.0" styleClass="anchorPane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.contactUpdate">
    <children>
       <Pane layoutX="-8.0" layoutY="-9.0" prefHeight="62.0" prefWidth="565.0" styleClass="body">
@@ -32,9 +31,9 @@
       <TextField fx:id="updateCity" layoutX="94.0" layoutY="134.0" prefHeight="25.0" prefWidth="374.0" />
       <TextField fx:id="updateZip" layoutX="94.0" layoutY="164.0" prefHeight="25.0" prefWidth="374.0" />
       <ComboBox fx:id="updateState" layoutX="94.0" layoutY="195.0" prefWidth="150.0" />
-      <ComboBox fx:id="updateCountry" layoutX="94.0" layoutY="227.0" prefWidth="150.0" />
+      <ComboBox fx:id="updateCountry" layoutX="94.0" layoutY="227.0" onAction="#setStateComboBox" prefWidth="150.0" />
       <TextField fx:id="updateTel" layoutX="94.0" layoutY="259.0" prefHeight="25.0" prefWidth="374.0" />
-      <Button fx:id="saveUpdateCustBtn" layoutX="96.0" layoutY="316.0" mnemonicParsing="false" onAction="#saveUpdateCust" text="Save" />
-      <Button fx:id="cancelUpdateCustBtn" layoutX="416.0" layoutY="316.0" mnemonicParsing="false" onAction="#cancelUpdateCust" text="Cancel" />
+      <Button fx:id="saveUpdateCustBtn" layoutX="96.0" layoutY="316.0" mnemonicParsing="false" text="Save" />
+      <Button fx:id="cancelUpdateCustBtn" layoutX="416.0" layoutY="316.0" mnemonicParsing="false" text="Cancel" />
    </children>
 </AnchorPane>

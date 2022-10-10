@@ -8,16 +8,17 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.mainWindow">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1500.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.mainWindow">
   <tabs>
     <Tab styleClass="tab:focused" text="Customers">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="691.0" prefWidth="923.0" stylesheets="@style.css">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="691.0" prefWidth="91500.0" stylesheets="@style.css">
                <children>
                   <Pane prefHeight="698.0" prefWidth="110.0" styleClass="body">
                      <children>
@@ -26,16 +27,16 @@
                         <Button fx:id="deleteContactBtn" layoutX="24.0" layoutY="249.0" mnemonicParsing="false" onAction="#deleteContact" prefHeight="25.0" prefWidth="63.0" text="DELETE" />
                      </children>
                   </Pane>
-                  <Pane layoutX="110.0" prefHeight="55.0" prefWidth="971.0" styleClass="anchorPane" />
-                  <TableView fx:id="customerTable" layoutX="110.0" layoutY="55.0" prefHeight="636.0" prefWidth="971.0">
+                  <Pane layoutX="110.0" prefHeight="55.0" prefWidth="1392.0" styleClass="anchorPane" />
+                  <TableView fx:id="customerTable" layoutX="110.0" layoutY="55.0" prefHeight="636.0" prefWidth="1393.0">
                     <columns>
                       <TableColumn fx:id="customerIdCol" prefWidth="75.0" text="Customer ID" />
-                      <TableColumn fx:id="customerNameCol" prefWidth="205.0" text="Customer Name" />
-                        <TableColumn fx:id="customerStreetCol" prefWidth="200.0" text="Street Address" />
-                        <TableColumn fx:id="customerCityCol" prefWidth="122.0" text="City" />
-                        <TableColumn fx:id="customerStateCol" prefWidth="55.0" text="State" />
-                        <TableColumn fx:id="customerZipCol" prefWidth="110.0" text="Zip Code" />
-                        <TableColumn fx:id="customerTelCol" prefWidth="203.0" text="Telephone" />
+                      <TableColumn fx:id="customerNameCol" prefWidth="298.0" text="Customer Name" />
+                        <TableColumn fx:id="customerAddressCol" prefWidth="435.0" text="Address" />
+                        <TableColumn fx:id="customerStateCol" prefWidth="127.0" text="State" />
+                        <TableColumn fx:id="customerZipCol" prefWidth="58.0" text="Zip Code" />
+                        <TableColumn fx:id="customerCountryCol" minWidth="0.0" prefWidth="116.0" text="Country" />
+                        <TableColumn fx:id="customerTelCol" prefWidth="283.0" text="Telephone" />
                     </columns>
                   </TableView>
                </children></AnchorPane>
@@ -52,17 +53,20 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <CheckBox layoutX="324.0" layoutY="18.0" mnemonicParsing="false" text="ALL" textFill="#395135">
+                        <CheckBox fx:id="allChkBox" layoutX="324.0" layoutY="18.0" mnemonicParsing="false" onAction="#chkBoxToggle" text="ALL" textFill="#395135">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <effect>
+                              <Reflection />
+                           </effect>
+                        </CheckBox>
+                        <CheckBox fx:id="weekChkBox" layoutX="681.0" layoutY="18.0" mnemonicParsing="false" onAction="#chkBoxToggle" text="Week" textFill="#395135">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </CheckBox>
-                        <CheckBox layoutX="681.0" layoutY="18.0" mnemonicParsing="false" text="Week" textFill="#395135">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </CheckBox>
-                        <CheckBox layoutX="395.0" layoutY="18.0" mnemonicParsing="false" text="Month" textFill="#395135">
+                        <CheckBox fx:id="monthChkBox" layoutX="395.0" layoutY="18.0" mnemonicParsing="false" onAction="#chkBoxToggle" text="Month" textFill="#395135">
                            <font>
                               <Font size="14.0" />
                            </font>

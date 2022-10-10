@@ -14,11 +14,15 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.*;
 
 public class loginForm {
     ResourceBundle rb = ResourceBundle.getBundle("view/myApp", Locale.getDefault());
+    ZoneId zone = ZoneId.systemDefault();
+
     @FXML
     private Button loginButton;
 
@@ -43,18 +47,17 @@ public class loginForm {
     @FXML
     private TextField userName;
 
-    Locale zone = Locale.getDefault();
     @FXML
     public void initialize(){
 
-        userLocationLabel.setText("your connecting from " + zone.getDisplayCountry());
+        userLocationLabel.setText("you are connecting from " + zone);
         if(Locale.getDefault().getLanguage().equals("fr")){
             loginButton.setText(rb.getString("button1"));
             mainmsg.setText(rb.getString("mainmsg"));
             secondmsg.setText(rb.getString("secondmsg"));
             textbox1.setText(rb.getString("textbox1"));
             textbox2.setText(rb.getString("textbox2"));
-            userLocationLabel.setText(rb.getString("footermsg")+ " " + zone.getDisplayCountry());
+            userLocationLabel.setText(rb.getString("footermsg")+ " " + zone);
 
         }
 
@@ -76,11 +79,11 @@ public class loginForm {
     public void loginButtonPressed(ActionEvent event) throws IOException, SQLException {
         String uname = userName.getText();
         String pword = password.getText();
-        System.out.println(uname + pword);
+
         if(login.validateUserPassword(uname, pword)) {
             Parent root = FXMLLoader.load(getClass().getResource("../view/mainWindow.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1080, 720);
+            Scene scene = new Scene(root, -1, -1);
             stage.setTitle("Main Form");
             stage.setScene(scene);
             stage.show();
@@ -92,7 +95,7 @@ public class loginForm {
                 invalidUserPassAlert("Wrong username or password");
             }
 
-            System.out.println(zone);
+
 
 
         }
