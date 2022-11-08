@@ -3,10 +3,13 @@ package model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.HashMap;
+
 public class DataStore {
     private static final ObservableList<Customer> customers = FXCollections.observableArrayList();
     private static final ObservableList<Appt> appointments = FXCollections.observableArrayList();
     private static final ObservableList<Schedule> schedules = FXCollections.observableArrayList();
+
 
     public static void addCustomer (Customer customer){
         customers.add(customer);

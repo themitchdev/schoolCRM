@@ -1,5 +1,8 @@
 package controller;
 
+import DAO.JDBC;
+import DAO.Utilities;
+import com.mysql.cj.protocol.Resultset;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,9 +16,10 @@ import model.Customer;
 import model.DataStore;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class contactAdd {
+public class customerAdd {
 
 
 
@@ -23,7 +27,7 @@ public class contactAdd {
     private TextField addName;
 
     @FXML
-    private TextField addStreet;
+    private TextField addAddress;
 
     @FXML
     private TextField addCity;
@@ -46,7 +50,24 @@ public class contactAdd {
     @FXML
     private Button cancelBtn;
 
-    public void saveAddCust(ActionEvent event) throws Exception{
+    public void saveCustomer(ActionEvent event) throws SQLException{
+        Integer customerID = 0;
+        String name = addName.getText();
+        String address = addAddress.getText();
+        String state = addState.getValue();
+        String zipcode = addZip.getText();
+        String phone = addTel.getText();
+        String country = addCountry.getValue();
+
+        Customer customer = new Customer(customerID, name, address, state, zipcode, phone, country);
+        DAO.JDBC.saveCustomer(customer);
+        ResultSet rs = JDBC.runStatement("SELECT Customer_ID FROM customers WHERE Customer_Name= '" + name + "'");
+        rs.next();
+        customer.setCustId(rs.getInt("Customer_ID"));
+        DataStore.addCustomer(customer);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
 
     }
 

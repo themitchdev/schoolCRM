@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="361.0" prefWidth="556.0" styleClass="anchorPane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.contactUpdate">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="412.0" prefWidth="556.0" styleClass="anchorPane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.customerUpdate">
    <children>
       <Pane layoutX="-8.0" layoutY="-9.0" prefHeight="62.0" prefWidth="565.0" styleClass="body">
          <children>
@@ -19,21 +19,21 @@
             </Label>
          </children>
       </Pane>
-      <Label layoutX="56.0" layoutY="77.0" prefHeight="17.0" prefWidth="38.0" text="Name:" />
-      <Label layoutX="56.0" layoutY="107.0" prefHeight="17.0" prefWidth="38.0" text="Street:" />
-      <Label layoutX="65.0" layoutY="138.0" prefHeight="17.0" prefWidth="26.0" text="City:" />
-      <Label layoutX="40.0" layoutY="168.0" prefHeight="17.0" prefWidth="56.0" text="Zip Code:" />
-      <Label layoutX="60.0" layoutY="199.0" prefHeight="17.0" prefWidth="32.0" text="State:" />
-      <Label layoutX="45.0" layoutY="231.0" prefHeight="17.0" prefWidth="49.0" text="Country:" />
-      <Label layoutX="32.0" layoutY="263.0" prefHeight="17.0" prefWidth="68.0" text="Telephone:" />
-      <TextField fx:id="updateName" layoutX="94.0" layoutY="73.0" prefHeight="25.0" prefWidth="374.0" />
-      <TextField fx:id="updateStreet" layoutX="94.0" layoutY="103.0" prefHeight="25.0" prefWidth="374.0" />
-      <TextField fx:id="updateCity" layoutX="94.0" layoutY="134.0" prefHeight="25.0" prefWidth="374.0" />
-      <TextField fx:id="updateZip" layoutX="94.0" layoutY="164.0" prefHeight="25.0" prefWidth="374.0" />
-      <ComboBox fx:id="updateState" layoutX="94.0" layoutY="195.0" prefWidth="150.0" />
-      <ComboBox fx:id="updateCountry" layoutX="94.0" layoutY="227.0" onAction="#setStateComboBox" prefWidth="150.0" />
-      <TextField fx:id="updateTel" layoutX="94.0" layoutY="259.0" prefHeight="25.0" prefWidth="374.0" />
-      <Button fx:id="saveUpdateCustBtn" layoutX="96.0" layoutY="316.0" mnemonicParsing="false" text="Save" />
-      <Button fx:id="cancelUpdateCustBtn" layoutX="416.0" layoutY="316.0" mnemonicParsing="false" text="Cancel" />
+      <Label layoutX="56.0" layoutY="129.0" prefHeight="17.0" prefWidth="38.0" text="Name:" />
+      <Label layoutX="45.0" layoutY="159.0" prefHeight="17.0" prefWidth="49.0" text="Address:" />
+      <Label layoutX="40.0" layoutY="190.0" prefHeight="17.0" prefWidth="56.0" text="Zip Code:" />
+      <Label layoutX="60.0" layoutY="221.0" prefHeight="17.0" prefWidth="32.0" text="State:" />
+      <Label layoutX="45.0" layoutY="253.0" prefHeight="17.0" prefWidth="49.0" text="Country:" />
+      <Label layoutX="32.0" layoutY="285.0" prefHeight="17.0" prefWidth="68.0" text="Telephone:" />
+      <TextField fx:id="updateName" layoutX="94.0" layoutY="125.0" prefHeight="25.0" prefWidth="374.0" />
+      <TextField fx:id="updateAddress" layoutX="94.0" layoutY="155.0" prefHeight="25.0" prefWidth="374.0" />
+      <TextField fx:id="updateZip" layoutX="94.0" layoutY="186.0" prefHeight="25.0" prefWidth="374.0" />
+      <ComboBox fx:id="updateState" layoutX="94.0" layoutY="217.0" prefWidth="150.0" />
+      <ComboBox fx:id="updateCountry" layoutX="94.0" layoutY="249.0" onAction="#setStateComboBox" prefWidth="150.0" />
+      <TextField fx:id="updateTel" layoutX="94.0" layoutY="281.0" prefHeight="25.0" prefWidth="374.0" />
+      <Button fx:id="saveUpdateCustBtn" layoutX="96.0" layoutY="338.0" mnemonicParsing="false" onAction="#updateCustomer" text="Save" />
+      <Button fx:id="cancelUpdateCustBtn" layoutX="416.0" layoutY="338.0" mnemonicParsing="false" onAction="#cancelUpdateCust" text="Cancel" />
+      <Label layoutX="19.0" layoutY="100.0" prefHeight="17.0" prefWidth="75.0" text="Customer ID" />
+      <TextField fx:id="customerID" editable="false" layoutX="94.0" layoutY="96.0" prefHeight="25.0" prefWidth="56.0" />
    </children>
 </AnchorPane>

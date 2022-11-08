@@ -2,7 +2,6 @@ package controller;
 
 import DAO.JDBC;
 import DAO.Utilities;
-import com.sun.javafx.geom.transform.Identity;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,11 +18,9 @@ import model.Appt;
 import model.Customer;
 import model.DataStore;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ResourceBundle;
+import java.util.Optional;
 
 public class mainWindow {
 
@@ -137,7 +134,7 @@ public class mainWindow {
 
     @FXML
     public void addContact(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("../view/contactAdd.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/customerAdd.fxml"));
 
         Stage stage = new Stage();//(Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.initModality(Modality.WINDOW_MODAL);
@@ -153,22 +150,26 @@ public class mainWindow {
 
     @FXML
     public void updateContact(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../view/contactUpdate.fxml"));
-        loader.load();
 
-        contactUpdate myController = loader.getController();
-        myController.getSelectedCustomer(customerTable.getSelectionModel().getSelectedItem());
+        if(customerTable.getSelectionModel().getSelectedItem() != null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/contactUpdate.fxml"));
+            loader.load();
+            customerUpdate myController = loader.getController();
+            myController.getSelectedCustomer(customerTable.getSelectionModel().getSelectedItem());
 
-        Stage stage = new Stage();
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(((Button) event.getSource()).getScene().getWindow());
+            Stage stage = new Stage();
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(((Button) event.getSource()).getScene().getWindow());
 
-        stage.setScene(new Scene(loader.getRoot(), -1, -1));
-        stage.setTitle("Update Contact");
-        //stage.setScene(scene);
-        stage.show();
+            stage.setScene(new Scene(loader.getRoot(), -1, -1));
+            stage.setTitle("Update Contact");
+            //stage.setScene(scene);
+            stage.show();
+        }else{
+            Utilities.dialogAlertInfo("Customer Update", "You must select a row before clicking the Update button");
 
+        }
 
     }
 
@@ -188,12 +189,28 @@ public class mainWindow {
 
     @FXML
     void deleteAppt(ActionEvent event) {
-        //DataStore.deleteAppt();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Modify Part");
+        alert.setHeaderText(null);
+        alert.setContentText("You must select a part before clicking the Modify button");
+        alert.showAndWait();
+        DataStore.deleteCustomer(customerTable.getSelectionModel().getSelectedItem());
 
     }
 
     @FXML
-    void deleteContact(ActionEvent event) {
+    void deleteContact(ActionEvent event) throws Exception {
+        if(customerTable.getSelectionModel().getSelectedItem() != null) {
+            Optional<ButtonType> btnSelected = Utilities.dialogAlertConfirm("Delete Customer", "Are you sure want to delete this Customer");
+            if (btnSelected.get() == ButtonType.OK){
+                Customer customer = customerTable.getSelectionModel().getSelectedItem();
+                JDBC.deleteCustomerSQL(customer);
+                DataStore.deleteCustomer(customer);
+            }
+        }else{
+            Utilities.dialogAlertInfo("Delete Customer", "You must select a row before clicking the Delete button");
+
+        }
 
     }
 
@@ -215,21 +232,7 @@ public class mainWindow {
         //stage.setScene(scene);
         stage.show();
 
-
-//        Parent root = FXMLLoader.load(getClass().getResource("../view/appointmentUpdate.fxml"));
-//
-//        Stage stage = new Stage();//(Stage) ((Node) event.getSource()).getScene().getWindow();
-//        stage.initModality(Modality.WINDOW_MODAL);
-//        stage.initOwner(((Node) event.getSource()).getScene().getWindow());
-//
-//        stage.setScene(new Scene(root, stage.getHeight(), stage.getWidth()));
-//        stage.setTitle("Update Appointment");
-//        //stage.setScene(scene);
-//        stage.show();
     }
-
-
-
 
     @FXML
     void chkBoxToggle(ActionEvent event) throws IOException {
