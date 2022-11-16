@@ -1,6 +1,8 @@
 package model;
 
-import DAO.JDBC;
+import Utilities.JDBC;
+import Utilities.Misc;
+import Utilities.Time;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -33,10 +36,18 @@ public class Main extends Application {
 
         JDBC.openConnection();
 
-        DAO.JDBC.insert1stLvlDivIntoList(DAO.Utilities.usStates, "1");
-        DAO.JDBC.insert1stLvlDivIntoList(DAO.Utilities.ukRegions, "2");
-        DAO.JDBC.insert1stLvlDivIntoList(DAO.Utilities.caProvinces, "3");
-        DAO.Utilities.buildDivisonIdHash();
+        Utilities.JDBC.insert1stLvlDivIntoList(Misc.usStates, "1");
+        Utilities.JDBC.insert1stLvlDivIntoList(Misc.ukRegions, "2");
+        Utilities.JDBC.insert1stLvlDivIntoList(Misc.caProvinces, "3");
+
+        Misc.buildDivisonIdHash();
+
+        Integer time = 1;
+        while(time < 13){
+            Time.hours.add(String.format("%02d", time));
+            time++;
+        }
+
 
         launch(args);
 

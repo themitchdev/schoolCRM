@@ -1,9 +1,7 @@
-package DAO;
+package Utilities;
 
 import javafx.collections.ObservableList;
 import model.Customer;
-import model.DataStore;
-
 import java.sql.*;
 
 public abstract class JDBC {
@@ -77,13 +75,13 @@ public abstract class JDBC {
     }
 
     public static void insert1stLvlDivIntoList(ObservableList<String> list, String countryID) throws SQLException {
-        ResultSet rs = DAO.JDBC.runStatement("SELECT Division FROM first_level_divisions WHERE Country_ID=" + countryID);
+        ResultSet rs = JDBC.runStatement("SELECT Division FROM first_level_divisions WHERE Country_ID=" + countryID);
         while (rs.next()){
             list.add(rs.getString("Division"));
             }
         }
     public static void saveCustomer(Customer customer) throws SQLException {
-        Integer division_ID = Utilities.divisionIdHash.get(customer.getState());
+        Integer division_ID = Misc.divisionIdHash.get(customer.getState());
         String sql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Division_ID) " +
                          "VALUES(?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -97,7 +95,7 @@ public abstract class JDBC {
         }
 
     public static void updateCustomerSQL(Customer customer) throws SQLException {
-        Integer division_ID = Utilities.divisionIdHash.get(customer.getState());
+        Integer division_ID = Misc.divisionIdHash.get(customer.getState());
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone= ?, Division_ID = ? WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, customer.getCustName());

@@ -1,13 +1,11 @@
 package controller;
 
-import DAO.Utilities;
+import Utilities.Misc;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appt;
 
@@ -90,15 +88,16 @@ public class appointmentUpdate {
             contactComboBOx.getSelectionModel().select(appt.getContact());
             customerId.setText(String.valueOf(appt.getCustId()));
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-            LocalDate date = LocalDate.parse(Utilities.getDateFromAppt(appt, 0), formatter);
+            LocalDate date = LocalDate.parse(Misc.getDateFromAppt(appt, 0), formatter);
             startDate.setValue(date);
             DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-            LocalDate date2 = LocalDate.parse(Utilities.getDateFromAppt(appt, 1), formatter2);
+            LocalDate date2 = LocalDate.parse(Misc.getDateFromAppt(appt, 1), formatter2);
             endDate.setValue(date2);
-            startTime.setText(Utilities.getTimeFromAppt(appt, 0));
-            endTime.setText(Utilities.getTimeFromAppt(appt, 1));
+            //startTime.setText(Utilities.getTimeFromAppt(appt, 0));
+            //endTime.setText(Utilities.getTimeFromAppt(appt, 1));
             AMlabel.setText(pickAMorPM(startTime));
             PMlabel.setText(pickAMorPM(endTime));
+
             //System.out.
 
 //            DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM-dd-yyyy");
@@ -112,12 +111,6 @@ public class appointmentUpdate {
 
     @FXML
     void saveUpdateAppt(ActionEvent event) {
-
-    }
-
-    @FXML
-    public void initialize() throws ParseException {
-
 
     }
 
@@ -140,6 +133,14 @@ public class appointmentUpdate {
             PMlabel.setText("AM");
         }
     }
+
+    @FXML
+    public void initialize() throws ParseException {
+        startDate.setDayCellFactory(Misc.dayCellFactory);
+        endDate.setDayCellFactory(Misc.dayCellFactory);
+
+    }
+
 
 
 }

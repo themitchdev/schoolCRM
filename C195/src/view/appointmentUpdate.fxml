@@ -38,9 +38,11 @@
       <ComboBox fx:id="type" layoutX="94.0" layoutY="289.0" prefHeight="25.0" prefWidth="79.0" />
       <Button fx:id="saveBtn" layoutX="94.0" layoutY="335.0" mnemonicParsing="false" onAction="#saveUpdateAppt" text="Save" />
       <Button fx:id="cancelBtn" layoutX="416.0" layoutY="335.0" mnemonicParsing="false" onAction="#cancelUpdateAppt" text="Cancel" />
-      <TextField fx:id="startTime" layoutX="217.0" layoutY="227.0" onKeyReleased="#selectAMPM" prefHeight="25.0" prefWidth="68.0" promptText="HH:MM" />
-      <TextField fx:id="endTime" layoutX="217.0" layoutY="259.0" onKeyReleased="#selectAMPM" prefHeight="25.0" prefWidth="68.0" promptText="HH:MM" />
-      <Label fx:id="AMlabel" layoutX="287.0" layoutY="232.0" prefHeight="17.0" prefWidth="32.0" text="AM" />
-      <Label fx:id="PMlabel" layoutX="287.0" layoutY="264.0" prefHeight="17.0" prefWidth="32.0" text="PM" />
+      <TextField fx:id="startTime" layoutX="269.0" layoutY="227.0" onKeyReleased="#selectAMPM" prefHeight="25.0" prefWidth="68.0" promptText="HH:MM" />
+      <TextField fx:id="endTime" layoutX="269.0" layoutY="259.0" onKeyReleased="#selectAMPM" prefHeight="25.0" prefWidth="68.0" promptText="HH:MM" />
+      <Label fx:id="AMlabel" layoutX="339.0" layoutY="232.0" prefHeight="17.0" prefWidth="32.0" text="AM" />
+      <Label fx:id="PMlabel" layoutX="339.0" layoutY="264.0" prefHeight="17.0" prefWidth="32.0" text="PM" />
+      <Label layoutX="211.0" layoutY="231.0" text="Start Time:" />
+      <Label layoutX="216.0" layoutY="263.0" text="End Time:" />
    </children>
 </AnchorPane>

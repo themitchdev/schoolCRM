@@ -1,4 +1,4 @@
-package DAO;
+package Utilities;
 
 import model.loginlogger;
 
@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public abstract class login {
 

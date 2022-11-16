@@ -1,7 +1,7 @@
 package controller;
 
-import DAO.JDBC;
-import DAO.Utilities;
+import Utilities.JDBC;
+import Utilities.Misc;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -10,9 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Customer;
 import model.DataStore;
-
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class customerUpdate {
@@ -49,7 +47,7 @@ public class customerUpdate {
         Integer custObjIndex = DataStore.getAllCustomers().indexOf(customerFromMainForm);
         DataStore.updateCustomer(custObjIndex, customer);
 
-        DAO.JDBC.updateCustomerSQL(customer);
+        JDBC.updateCustomerSQL(customer);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
@@ -76,13 +74,13 @@ public class customerUpdate {
             String selected = updateCountry.getSelectionModel().getSelectedItem();
             switch (selected) {
                 case "U.S":
-                    updateState.setItems(DAO.Utilities.usStates);
+                    updateState.setItems(Misc.usStates);
                     break;
                 case "UK":
-                    updateState.setItems(DAO.Utilities.ukRegions);
+                    updateState.setItems(Misc.ukRegions);
                     break;
                 case "Canada":
-                    updateState.setItems(DAO.Utilities.caProvinces);
+                    updateState.setItems(Misc.caProvinces);
                     break;
             }
         }
@@ -93,13 +91,13 @@ public class customerUpdate {
         System.out.println(selected);
         switch (selected) {
             case "U.S":
-                updateState.setItems(DAO.Utilities.usStates);
+                updateState.setItems(Misc.usStates);
                 break;
             case "UK":
-                updateState.setItems(DAO.Utilities.ukRegions);
+                updateState.setItems(Misc.ukRegions);
                 break;
             case "Canada":
-                updateState.setItems(DAO.Utilities.caProvinces);
+                updateState.setItems(Misc.caProvinces);
                 break;
         }
 

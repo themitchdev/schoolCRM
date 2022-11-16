@@ -1,7 +1,7 @@
 package controller;
 
-import DAO.JDBC;
-import DAO.Utilities;
+import Utilities.JDBC;
+import Utilities.Misc;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -167,7 +167,23 @@ public class mainWindow {
             //stage.setScene(scene);
             stage.show();
         }else{
-            Utilities.dialogAlertInfo("Customer Update", "You must select a row before clicking the Update button");
+            Misc.dialogAlertInfo("Customer Update", "You must select a row before clicking the Update button");
+
+        }
+
+    }
+
+    @FXML
+    void deleteContact(ActionEvent event) throws Exception {
+        if(customerTable.getSelectionModel().getSelectedItem() != null) {
+            Optional<ButtonType> btnSelected = Misc.dialogAlertConfirm("Delete Customer", "Are you sure want to delete this Customer");
+            if (btnSelected.get() == ButtonType.OK){
+                Customer customer = customerTable.getSelectionModel().getSelectedItem();
+                JDBC.deleteCustomerSQL(customer);
+                DataStore.deleteCustomer(customer);
+            }
+        }else{
+            Misc.dialogAlertInfo("Delete Customer", "You must select a row before clicking the Delete button");
 
         }
 
@@ -187,34 +203,7 @@ public class mainWindow {
         stage.show();
     }
 
-    @FXML
-    void deleteAppt(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Modify Part");
-        alert.setHeaderText(null);
-        alert.setContentText("You must select a part before clicking the Modify button");
-        alert.showAndWait();
-        DataStore.deleteCustomer(customerTable.getSelectionModel().getSelectedItem());
-
-    }
-
-    @FXML
-    void deleteContact(ActionEvent event) throws Exception {
-        if(customerTable.getSelectionModel().getSelectedItem() != null) {
-            Optional<ButtonType> btnSelected = Utilities.dialogAlertConfirm("Delete Customer", "Are you sure want to delete this Customer");
-            if (btnSelected.get() == ButtonType.OK){
-                Customer customer = customerTable.getSelectionModel().getSelectedItem();
-                JDBC.deleteCustomerSQL(customer);
-                DataStore.deleteCustomer(customer);
-            }
-        }else{
-            Utilities.dialogAlertInfo("Delete Customer", "You must select a row before clicking the Delete button");
-
-        }
-
-    }
-
-    @FXML
+   @FXML
     void updateAppt(ActionEvent event) throws IOException, ParseException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../view/appointmentUpdate.fxml"));
@@ -231,6 +220,17 @@ public class mainWindow {
         stage.setTitle("Update Appointment");
         //stage.setScene(scene);
         stage.show();
+
+    }
+
+    @FXML
+    void deleteAppt(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Modify Part");
+        alert.setHeaderText(null);
+        alert.setContentText("You must select a part before clicking the Modify button");
+        alert.showAndWait();
+        DataStore.deleteCustomer(customerTable.getSelectionModel().getSelectedItem());
 
     }
 
@@ -279,7 +279,6 @@ public class mainWindow {
         customerTelCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerCountryCol.setCellValueFactory(new PropertyValueFactory<>("country"));
 
-        System.out.println(DataStore.getAllCustomers().get(0).getCountry());
 
         ResultSet apptResultSet = JDBC.runStatement("SELECT * FROM appointments");
         int index = 0;
@@ -290,8 +289,8 @@ public class mainWindow {
                                        apptResultSet.getString("Location"),
                                        JDBC.apptGetContactName(apptResultSet.getInt("Appointment_ID")),
                                        apptResultSet.getInt("Customer_ID"),
-                                       apptResultSet.getTimestamp("Start"),
-                                       apptResultSet.getTimestamp("End"),
+                                       Utilities.Time.fromSQLtoUTC(apptResultSet.getTimestamp("Start")),
+                                       Utilities.Time.fromSQLtoUTC(apptResultSet.getTimestamp("End")),
                                        apptResultSet.getString("Type"),
                                        apptResultSet.getInt("User_ID")));
 

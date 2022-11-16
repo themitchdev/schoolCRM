@@ -1,10 +1,7 @@
 package controller;
 
-import DAO.JDBC;
-import DAO.Utilities;
-import com.mysql.cj.protocol.Resultset;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import Utilities.JDBC;
+import Utilities.Misc;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -28,9 +25,6 @@ public class customerAdd {
 
     @FXML
     private TextField addAddress;
-
-    @FXML
-    private TextField addCity;
 
     @FXML
     private TextField addZip;
@@ -60,7 +54,7 @@ public class customerAdd {
         String country = addCountry.getValue();
 
         Customer customer = new Customer(customerID, name, address, state, zipcode, phone, country);
-        DAO.JDBC.saveCustomer(customer);
+        JDBC.saveCustomer(customer);
         ResultSet rs = JDBC.runStatement("SELECT Customer_ID FROM customers WHERE Customer_Name= '" + name + "'");
         rs.next();
         customer.setCustId(rs.getInt("Customer_ID"));
@@ -81,24 +75,23 @@ public class customerAdd {
         System.out.println(selected);
         switch (selected) {
             case "U.S":
-                addState.setItems(DAO.Utilities.usStates);
+                addState.setItems(Misc.usStates);
                 break;
             case "UK":
-                addState.setItems(DAO.Utilities.ukRegions);
+                addState.setItems(Misc.ukRegions);
                 break;
             case "Canada":
-                addState.setItems(DAO.Utilities.caProvinces);
+                addState.setItems(Misc.caProvinces);
                 break;
         }
-
-
     }
+
 
 
 
     @FXML
     public void initialize() throws SQLException {
-        addCountry.setItems(DAO.Utilities.countries);
+        addCountry.setItems(Misc.countries);
 
 
 
