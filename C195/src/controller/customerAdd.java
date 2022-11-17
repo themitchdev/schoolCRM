@@ -86,9 +86,6 @@ public class customerAdd {
         }
     }
 
-
-
-
     @FXML
     public void initialize() throws SQLException {
         addCountry.setItems(DataStore.countries);

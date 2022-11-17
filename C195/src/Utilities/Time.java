@@ -8,7 +8,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 public class Time {
-
     private static final LocalDate date = LocalDate.now();
     private static final LocalTime timeOpen = LocalTime.of(8,0);
     private static final LocalTime timeClose = LocalTime.of(22,0);
