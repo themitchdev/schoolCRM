@@ -95,9 +95,6 @@ public class customerAdd {
 
 
 
-
-
-
     }
 
 }
