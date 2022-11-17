@@ -344,9 +344,7 @@ public class mainWindow {
                                              rsContact.getString("Email")));
 
         }
-        Misc.buildApptTypeList();
-        Misc.buildCustomerNameList();
-        Misc.buildContactNameList();
+
 
     }
 }

@@ -97,6 +97,9 @@ public class appointmentAdd {
         endMinCbox.setItems(Time.minutes);
         startAmPmCbox.setItems(Time.amOrPm);
         endAmPmCbox.setItems(Time.amOrPm);
+        Misc.buildCustomerNameList();
+        Misc.buildApptTypeList();
+        Misc.buildContactNameList();
         typeCbox.setItems(DataStore.appointmentType);
         customerNameCbox.setItems(DataStore.customerNames);
         contactComboBOx.setItems(DataStore.contactNames);
