@@ -116,14 +116,15 @@ public abstract class JDBC {
         ps.execute();
     }
 
-    public static void deleteAppointmentSQL(Appt appointment) throws Exception {
+    public static void deleteAppointmentSQL(Integer appointmentId) throws Exception {
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setString(1, String.valueOf(appointment.getId()));
+        ps.setString(1, String.valueOf(appointmentId));
         ps.execute();
     }
 
     public static String getCustNameFromCustId(Integer custId) throws SQLException {
+        //check is there an appointment with customerid
         String sql = "SELECT Customer_Name FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, String.valueOf(custId));
@@ -132,6 +133,27 @@ public abstract class JDBC {
         return  rs.getString("Customer_Name");
     }
 
+    public static boolean isCustIdInApptTbl(Integer custId) throws SQLException {
+        String sql = "SELECT Customer_ID FROM appointments WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, String.valueOf(custId));
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()){
+            return true;
+        }
+        return false;
     }
+
+    public static void deleteAllApptWithCustId(Integer custId) throws Exception {
+        String sql = "SELECT Appointment_ID FROM appointments WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, String.valueOf(custId));
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            deleteAppointmentSQL(rs.getInt("Appointment_ID"));
+        }
+    }
+
+}
 
 

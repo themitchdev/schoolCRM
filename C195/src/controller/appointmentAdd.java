@@ -87,9 +87,6 @@ public class appointmentAdd {
 //        stage.close();
     }
 
-
-
-
     public void initialize() throws SQLException {
         startHourCbox.setItems(Time.hours);
         startMinCbox.setItems(Time.minutes);

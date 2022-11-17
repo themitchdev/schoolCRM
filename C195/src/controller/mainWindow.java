@@ -154,7 +154,7 @@ public class mainWindow {
 
         if(customerTable.getSelectionModel().getSelectedItem() != null) {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("../view/contactUpdate.fxml"));
+            loader.setLocation(getClass().getResource("../view/customerUpdate.fxml"));
             loader.load();
             customerUpdate myController = loader.getController();
             myController.getSelectedCustomer(customerTable.getSelectionModel().getSelectedItem());
@@ -176,12 +176,15 @@ public class mainWindow {
 
     @FXML
     void deleteContact(ActionEvent event) throws Exception {
-        if(customerTable.getSelectionModel().getSelectedItem() != null) {
+        Customer tempCustomer = customerTable.getSelectionModel().getSelectedItem();
+        if( tempCustomer != null) {
             Optional<ButtonType> btnSelected = Misc.dialogAlertConfirm("Delete Customer", "Are you sure want to delete this Customer");
             if (btnSelected.get() == ButtonType.OK){
-                Customer customer = customerTable.getSelectionModel().getSelectedItem();
-                JDBC.deleteCustomerSQL(customer);
-                DataStore.deleteCustomer(customer);
+                if(JDBC.isCustIdInApptTbl(tempCustomer.getCustId())){
+                    JDBC.deleteAllApptWithCustId(tempCustomer.getCustId());
+                }
+                JDBC.deleteCustomerSQL(tempCustomer);
+                DataStore.deleteCustomer(tempCustomer);
             }
         }else{
             Misc.dialogAlertInfo("Delete Customer", "You must select a row before clicking the Delete button");
@@ -250,7 +253,7 @@ public class mainWindow {
             Optional<ButtonType> btnSelected = Misc.dialogAlertConfirm("Delete Appointment", "Are you sure want to delete this Appointment");
             if (btnSelected.get() == ButtonType.OK){
                 Appt appointment = apptTable.getSelectionModel().getSelectedItem();
-                JDBC.deleteAppointmentSQL(appointment);
+                JDBC.deleteAppointmentSQL(appointment.getId());
                 DataStore.deleteAppt(appointment);
             }
         }else{
