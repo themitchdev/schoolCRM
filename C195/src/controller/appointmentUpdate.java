@@ -1,18 +1,20 @@
 package controller;
 
+import Utilities.JDBC;
 import Utilities.Misc;
+import Utilities.Time;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import model.Appt;
-
+import model.Contact;
+import model.DataStore;
 import java.io.IOException;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 public class appointmentUpdate {
 
@@ -29,7 +31,7 @@ public class appointmentUpdate {
     private ComboBox<String> contactComboBOx;
 
     @FXML
-    private TextField customerId;
+    private ComboBox<String> customerNameCbox;
 
     @FXML
     private DatePicker startDate;
@@ -38,31 +40,26 @@ public class appointmentUpdate {
     private DatePicker endDate;
 
     @FXML
+    private ComboBox<String> startHourCbox;
+
+    @FXML
+    private ComboBox<String> endHourCbox;
+
+    @FXML
+    private ComboBox<String> startMinCbox;
+
+    @FXML
+    private ComboBox<String> endMinCbox;
+
+    @FXML
+    private ComboBox<String> startAmPmCbox;
+
+    @FXML
+    private ComboBox<String> endAmPmCbox;
+
+    @FXML
     private ComboBox<String> type;
 
-    @FXML
-    private Button saveBtn;
-
-    @FXML
-    private Button cancelBtn;
-
-    @FXML
-    private Label AMlabel;
-
-    @FXML
-    private Label PMlabel;
-
-    @FXML
-    private TextField startTime;
-
-    @FXML
-    private TextField endTime;
-
-    @FXML
-    private Button saveUpdateApptBtn;
-
-    @FXML
-    private Button cancelUpdateApptBtn;
 
     @FXML
     void cancelUpdateAppt(ActionEvent event) throws IOException {
@@ -70,76 +67,51 @@ public class appointmentUpdate {
         stage.close();
     }
 
-
-    public String pickAMorPM(TextField textfieldName) throws ParseException {
-        int time = Integer.parseInt(textfieldName.getText().split(":")[0]);
-
-        if (time == 12 || time < 6) {
-            return "PM";
-        }
-        return "AM";
-    }
-
-    void getSelectedAppt(Appt appt) throws ParseException {
-        if (appt != null) {
-            title.setText(appt.getTitle());
-            description.setText(appt.getDescription());
-            apptlocation.setText(appt.getLocation());
-            contactComboBOx.getSelectionModel().select(appt.getContact());
-            customerId.setText(String.valueOf(appt.getCustId()));
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-            LocalDate date = LocalDate.parse(Misc.getDateFromAppt(appt, 0), formatter);
-            startDate.setValue(date);
-            DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-            LocalDate date2 = LocalDate.parse(Misc.getDateFromAppt(appt, 1), formatter2);
-            endDate.setValue(date2);
-            //startTime.setText(Utilities.getTimeFromAppt(appt, 0));
-            //endTime.setText(Utilities.getTimeFromAppt(appt, 1));
-            AMlabel.setText(pickAMorPM(startTime));
-            PMlabel.setText(pickAMorPM(endTime));
-
-            //System.out.
-
-//            DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-//            LocalDate date2 = LocalDate.parse(Utilities.getDateFromAppt(appt,1), formatter2);
-//            endDate.setValue(date2);
-//            endTime.setText(Utilities.getTimeFromAppt(appt));
-
-
-        }
-    }
-
     @FXML
     void saveUpdateAppt(ActionEvent event) {
 
+
+    }
+
+    void getSelectedAppt(Appt appt) throws SQLException {
+        title.setText(appt.getTitle());
+        description.setText(appt.getDescription());
+        apptlocation.setText(appt.getLocation());
+        contactComboBOx.getSelectionModel().select(appt.getContact());
+        customerNameCbox.getSelectionModel().select(JDBC.getCustNameFromCustId(appt.getCustId()));
+        startDate.setValue(appt.getStartDate());
+        endDate.setValue(appt.getEndDate());
+        startHourCbox.getSelectionModel().select(String.format("%02d", appt.getStartTime().getHour()));
+        startMinCbox.getSelectionModel().select(String.format("%02d", appt.getStartTime().getMinute()));
+        startAmPmCbox.getSelectionModel().select(Time.formatAMorPM(appt.getStartTime()));
+        endHourCbox.getSelectionModel().select(String.format("%02d", appt.getEndTime().getHour()));
+        endMinCbox.getSelectionModel().select(String.format("%02d", appt.getEndTime().getMinute()));
+        endAmPmCbox.getSelectionModel().select(Time.formatAMorPM(appt.getEndTime()));
+        type.getSelectionModel().select(appt.getType());
+
     }
 
     @FXML
-    public void selectAMPM(KeyEvent keyEvent) {
-        int startTime1 = Integer.parseInt(startTime.getText().split(":")[0]);
-        int endTime2 = Integer.parseInt(endTime.getText().split(":")[0]);
+    public void initialize() throws SQLException {
+        startHourCbox.setItems(Time.hours);
+        startMinCbox.setItems(Time.minutes);
+        endHourCbox.setItems(Time.hours);
+        endMinCbox.setItems(Time.minutes);
+        startAmPmCbox.setItems(Time.amOrPm);
+        endAmPmCbox.setItems(Time.amOrPm);
 
-        if (startTime1 == 12 || startTime1 < 6) {
-            AMlabel.setText("PM");
+
+        type.setItems(DataStore.appointmentType);
+
+
+        customerNameCbox.setItems(DataStore.customerNames);
+
+
+        contactComboBOx.setItems(DataStore.contactNames);
+
         }
 
-        if (startTime1 < 12 && startTime1 > 6) {
-            AMlabel.setText("AM");
-        }
 
-        if (endTime2 == 12 || endTime2 < 6) {
-            PMlabel.setText("PM");
-        } else {
-            PMlabel.setText("AM");
-        }
-    }
-
-    @FXML
-    public void initialize() throws ParseException {
-        startDate.setDayCellFactory(Misc.dayCellFactory);
-        endDate.setDayCellFactory(Misc.dayCellFactory);
-
-    }
 
 
 

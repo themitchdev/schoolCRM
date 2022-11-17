@@ -1,12 +1,14 @@
 package controller;
 
 import Utilities.Misc;
+import Utilities.Time;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import model.DataStore;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,10 +25,10 @@ public class appointmentAdd {
     private TextField apptLocation;
 
     @FXML
-    private ComboBox<String> apptContactCboBox;
+    private ComboBox<String> contactComboBOx;
 
     @FXML
-    private TextField apptContactID;
+    private ComboBox<String> customerNameCbox;
 
     @FXML
     private DatePicker apptStartDate;
@@ -35,32 +37,31 @@ public class appointmentAdd {
     private DatePicker apptEndDate;
 
     @FXML
-    private ComboBox<String> apptTypeCboBox;
+    private ComboBox<String> startHourCbox;
 
     @FXML
-    private Button saveAddApptBtn;
+    private ComboBox<String> endHourCbox;
 
     @FXML
-    private Button cancelAddApptBtn;
+    private ComboBox<String> startMinCbox;
 
     @FXML
-    private TextField apptStartTime;
+    private ComboBox<String> endMinCbox;
 
     @FXML
-    private TextField apptEndTime;
+    private ComboBox<String> startAmPmCbox;
 
     @FXML
-    private Label AMlabel;
+    private ComboBox<String> endAmPmCbox;
 
     @FXML
-    private Label PMlabel;
+    private ComboBox<String> typeCbox;
 
 
     @FXML
     void cancelAddAppt(ActionEvent event) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
-
     }
 
     @FXML
@@ -69,9 +70,9 @@ public class appointmentAdd {
         String title = apptTitle.getText();
         String description = apptDescription.getText();
         String location = apptLocation.getText();
-        String contact = apptContactCboBox.getValue();
-        String contactID = apptContactID.getText();
-        String type = apptTypeCboBox.getValue();
+        String contact = contactComboBOx.getValue();
+        String customerName = customerNameCbox.getValue();
+        String type = typeCbox.getValue();
 
 
 
@@ -85,31 +86,26 @@ public class appointmentAdd {
 //        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 //        stage.close();
     }
-    @FXML
-    public void selectAMPM(KeyEvent keyEvent) {
-        int startTime1 = Integer.parseInt(apptStartTime.getText().split(":")[0]);
-        int endTime2 = Integer.parseInt(apptEndTime.getText().split(":")[0]);
 
-        if (startTime1 == 12 || startTime1 < 6) {
-            AMlabel.setText("PM");
-        }
-
-        if (startTime1 < 12 && startTime1 > 6) {
-            AMlabel.setText("AM");
-        }
-
-        if (endTime2 == 12 || endTime2 < 6) {
-            PMlabel.setText("PM");
-        } else {
-            PMlabel.setText("AM");
-        }
-    }
 
 
 
     public void initialize() throws SQLException {
-        apptStartDate.setDayCellFactory(Misc.dayCellFactory);
-        apptEndDate.setDayCellFactory(Misc.dayCellFactory);
+        startHourCbox.setItems(Time.hours);
+        startMinCbox.setItems(Time.minutes);
+        endHourCbox.setItems(Time.hours);
+        endMinCbox.setItems(Time.minutes);
+        startAmPmCbox.setItems(Time.amOrPm);
+        endAmPmCbox.setItems(Time.amOrPm);
+
+        typeCbox.setItems(DataStore.appointmentType);
+
+
+        customerNameCbox.setItems(DataStore.customerNames);
+
+
+        contactComboBOx.setItems(DataStore.contactNames);
+
     }
 
 }

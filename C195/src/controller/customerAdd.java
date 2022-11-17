@@ -75,13 +75,13 @@ public class customerAdd {
         System.out.println(selected);
         switch (selected) {
             case "U.S":
-                addState.setItems(Misc.usStates);
+                addState.setItems(DataStore.usStates);
                 break;
             case "UK":
-                addState.setItems(Misc.ukRegions);
+                addState.setItems(DataStore.ukRegions);
                 break;
             case "Canada":
-                addState.setItems(Misc.caProvinces);
+                addState.setItems(DataStore.caProvinces);
                 break;
         }
     }
@@ -91,7 +91,7 @@ public class customerAdd {
 
     @FXML
     public void initialize() throws SQLException {
-        addCountry.setItems(Misc.countries);
+        addCountry.setItems(DataStore.countries);
 
 
 

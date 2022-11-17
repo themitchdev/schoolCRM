@@ -44,6 +44,7 @@ public class customerUpdate {
         String phone = updateTel.getText();
         String country = updateCountry.getValue();
         Customer customer = new Customer(custID, name, address, state, zipcode, phone, country);
+
         Integer custObjIndex = DataStore.getAllCustomers().indexOf(customerFromMainForm);
         DataStore.updateCustomer(custObjIndex, customer);
 
@@ -74,13 +75,13 @@ public class customerUpdate {
             String selected = updateCountry.getSelectionModel().getSelectedItem();
             switch (selected) {
                 case "U.S":
-                    updateState.setItems(Misc.usStates);
+                    updateState.setItems(DataStore.usStates);
                     break;
                 case "UK":
-                    updateState.setItems(Misc.ukRegions);
+                    updateState.setItems(DataStore.ukRegions);
                     break;
                 case "Canada":
-                    updateState.setItems(Misc.caProvinces);
+                    updateState.setItems(DataStore.caProvinces);
                     break;
             }
         }
@@ -88,16 +89,16 @@ public class customerUpdate {
 
     public void setStateComboBox(ActionEvent event) {
         String selected = updateCountry.getSelectionModel().getSelectedItem();
-        System.out.println(selected);
+
         switch (selected) {
             case "U.S":
-                updateState.setItems(Misc.usStates);
+                updateState.setItems(DataStore.usStates);
                 break;
             case "UK":
-                updateState.setItems(Misc.ukRegions);
+                updateState.setItems(DataStore.ukRegions);
                 break;
             case "Canada":
-                updateState.setItems(Misc.caProvinces);
+                updateState.setItems(DataStore.caProvinces);
                 break;
         }
 

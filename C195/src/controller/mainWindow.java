@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Appt;
+import model.Contact;
 import model.Customer;
 import model.DataStore;
 import java.io.IOException;
@@ -204,33 +205,58 @@ public class mainWindow {
     }
 
    @FXML
-    void updateAppt(ActionEvent event) throws IOException, ParseException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../view/appointmentUpdate.fxml"));
-        loader.load();
+    void updateAppt(ActionEvent event) throws IOException, ParseException, SQLException {
+       if(apptTable.getSelectionModel().getSelectedItem() != null) {
+           FXMLLoader loader = new FXMLLoader();
+           loader.setLocation(getClass().getResource("../view/appointmentUpdate.fxml"));
+           loader.load();
 
-        appointmentUpdate myController = loader.getController();
-        myController.getSelectedAppt(apptTable.getSelectionModel().getSelectedItem());
+           appointmentUpdate myController = loader.getController();
+           myController.getSelectedAppt(apptTable.getSelectionModel().getSelectedItem());
 
-        Stage stage = new Stage();
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(((Button) event.getSource()).getScene().getWindow());
+           Stage stage = new Stage();
+           stage.initModality(Modality.WINDOW_MODAL);
+           stage.initOwner(((Button) event.getSource()).getScene().getWindow());
 
-        stage.setScene(new Scene(loader.getRoot(), -1, -1));
-        stage.setTitle("Update Appointment");
-        //stage.setScene(scene);
-        stage.show();
+           stage.setScene(new Scene(loader.getRoot(), -1, -1));
+           stage.setTitle("Update Contact");
+           //stage.setScene(scene);
+           stage.show();
+       }else{
+           Misc.dialogAlertInfo("Appointment Update", "You must select a row before clicking the Update button");
+
+       }
+//        FXMLLoader loader = new FXMLLoader();
+//        loader.setLocation(getClass().getResource("../view/appointmentUpdate.fxml"));
+//        loader.load();
+//
+//        appointmentUpdate myController = loader.getController();
+//        myController.getSelectedAppt(apptTable.getSelectionModel().getSelectedItem());
+//
+//        Stage stage = new Stage();
+//        stage.initModality(Modality.WINDOW_MODAL);
+//        stage.initOwner(((Button) event.getSource()).getScene().getWindow());
+//
+//        stage.setScene(new Scene(loader.getRoot(), -1, -1));
+//        stage.setTitle("Update Appointment");
+//        //stage.setScene(scene);
+//        stage.show();
 
     }
 
     @FXML
-    void deleteAppt(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Modify Part");
-        alert.setHeaderText(null);
-        alert.setContentText("You must select a part before clicking the Modify button");
-        alert.showAndWait();
-        DataStore.deleteCustomer(customerTable.getSelectionModel().getSelectedItem());
+    void deleteAppt(ActionEvent event) throws Exception {
+        if(apptTable.getSelectionModel().getSelectedItem() != null) {
+            Optional<ButtonType> btnSelected = Misc.dialogAlertConfirm("Delete Appointment", "Are you sure want to delete this Appointment");
+            if (btnSelected.get() == ButtonType.OK){
+                Appt appointment = apptTable.getSelectionModel().getSelectedItem();
+                JDBC.deleteAppointmentSQL(appointment);
+                DataStore.deleteAppt(appointment);
+            }
+        }else{
+            Misc.dialogAlertInfo("Delete Customer", "You must select a row before clicking the Delete button");
+
+        }
 
     }
 
@@ -291,6 +317,10 @@ public class mainWindow {
                                        apptResultSet.getInt("Customer_ID"),
                                        Utilities.Time.fromSQLtoUTC(apptResultSet.getTimestamp("Start")),
                                        Utilities.Time.fromSQLtoUTC(apptResultSet.getTimestamp("End")),
+                                       Utilities.Time.fromSQLtoUserTime(apptResultSet.getTimestamp("Start")).toLocalDate(),
+                                       Utilities.Time.fromSQLtoUserTime(apptResultSet.getTimestamp("Start")).toLocalTime(),
+                                       Utilities.Time.fromSQLtoUserTime(apptResultSet.getTimestamp("End")).toLocalDate(),
+                                       Utilities.Time.fromSQLtoUserTime(apptResultSet.getTimestamp("End")).toLocalTime(),
                                        apptResultSet.getString("Type"),
                                        apptResultSet.getInt("User_ID")));
 
@@ -302,16 +332,21 @@ public class mainWindow {
         apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         apptContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
         apptCustdCol.setCellValueFactory(new PropertyValueFactory<>("custId"));
-        apptStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
-        apptEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
+        apptStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("formattedStartDateTime"));
+        apptEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("formattedEndDateTime"));
         apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         apptUsertIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
+        ResultSet rsContact = JDBC.runStatement("SELECT * FROM contacts");
+        while (rsContact.next()){
+            DataStore.addContact(new Contact(rsContact.getInt("Contact_ID"),
+                                             rsContact.getString("Contact_Name"),
+                                             rsContact.getString("Email")));
 
+        }
+        Misc.buildApptTypeList();
+        Misc.buildCustomerNameList();
+        Misc.buildContactNameList();
 
     }
-
-
-
-
 }

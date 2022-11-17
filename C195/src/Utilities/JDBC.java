@@ -1,7 +1,10 @@
 package Utilities;
 
 import javafx.collections.ObservableList;
+import model.Appt;
 import model.Customer;
+import model.DataStore;
+
 import java.sql.*;
 
 public abstract class JDBC {
@@ -81,7 +84,7 @@ public abstract class JDBC {
             }
         }
     public static void saveCustomer(Customer customer) throws SQLException {
-        Integer division_ID = Misc.divisionIdHash.get(customer.getState());
+        Integer division_ID = DataStore.divisionIdHash.get(customer.getState());
         String sql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Division_ID) " +
                          "VALUES(?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -95,7 +98,7 @@ public abstract class JDBC {
         }
 
     public static void updateCustomerSQL(Customer customer) throws SQLException {
-        Integer division_ID = Misc.divisionIdHash.get(customer.getState());
+        Integer division_ID = DataStore.divisionIdHash.get(customer.getState());
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone= ?, Division_ID = ? WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, customer.getCustName());
@@ -113,6 +116,21 @@ public abstract class JDBC {
         ps.execute();
     }
 
+    public static void deleteAppointmentSQL(Appt appointment) throws Exception {
+        String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, String.valueOf(appointment.getId()));
+        ps.execute();
+    }
+
+    public static String getCustNameFromCustId(Integer custId) throws SQLException {
+        String sql = "SELECT Customer_Name FROM customers WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, String.valueOf(custId));
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        return  rs.getString("Customer_Name");
+    }
 
     }
 

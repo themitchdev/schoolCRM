@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
-import java.time.LocalTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -36,11 +35,10 @@ public class Main extends Application {
 
         JDBC.openConnection();
 
-        Utilities.JDBC.insert1stLvlDivIntoList(Misc.usStates, "1");
-        Utilities.JDBC.insert1stLvlDivIntoList(Misc.ukRegions, "2");
-        Utilities.JDBC.insert1stLvlDivIntoList(Misc.caProvinces, "3");
-
-        Misc.buildDivisonIdHash();
+        Utilities.JDBC.insert1stLvlDivIntoList(DataStore.usStates, "1");
+        Utilities.JDBC.insert1stLvlDivIntoList(DataStore.ukRegions, "2");
+        Utilities.JDBC.insert1stLvlDivIntoList(DataStore.caProvinces, "3");
+        DataStore.buildDivisonIdHash();
 
         Integer time = 1;
         while(time < 13){

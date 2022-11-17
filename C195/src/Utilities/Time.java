@@ -19,13 +19,21 @@ public class Time {
 
     public static final ObservableList<String> minutes = FXCollections.observableArrayList("00", "15", "30", "45");
     public static final ObservableList<String> hours = FXCollections.observableArrayList();
-
+    public static final ObservableList<String> amOrPm = FXCollections.observableArrayList("AM", "PM");
 
     public static ZonedDateTime fromSQLtoUTC(Timestamp ts) {
-
         ZonedDateTime zdt = ts.toLocalDateTime().atZone(ZoneId.of("UTC"));
-
         return zdt;
+    }
+
+    public static ZonedDateTime fromSQLtoUserTime(Timestamp ts) {
+        ZonedDateTime zdt = ts.toLocalDateTime().atZone(ZoneId.of("UTC"));
+        return zdt.withZoneSameInstant(ZoneId.systemDefault());
+    }
+
+    public static String formatZonedDateTime(ZonedDateTime dateTime){
+        String formattedDateTime = dateTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a"));
+        return formattedDateTime;
     }
 
     public static String formatDate(LocalDate date){

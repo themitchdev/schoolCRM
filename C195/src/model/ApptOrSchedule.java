@@ -4,10 +4,7 @@ import org.w3c.dom.html.HTMLImageElement;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 public abstract class ApptOrSchedule {
     private int apptId;
@@ -25,7 +22,20 @@ public abstract class ApptOrSchedule {
     private String type;
     private int userId ;
 
-    public ApptOrSchedule(int apptId, String title, String description, String location, String contact, int custId, ZonedDateTime startDateTime, ZonedDateTime endDateTime, String type, int userId) {
+    public ApptOrSchedule(int apptId,
+                          String title,
+                          String description,
+                          String location,
+                          String contact,
+                          int custId,
+                          ZonedDateTime startDateTime,
+                          ZonedDateTime endDateTime,
+                          LocalDate startDate,
+                          LocalTime startTime,
+                          LocalDate endDate,
+                          LocalTime endTime,
+                          String type,
+                          int userId) {
         this.apptId = apptId;
         this.title = title;
         this.description = description;
@@ -34,6 +44,10 @@ public abstract class ApptOrSchedule {
         this.custId = custId;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
+        this.startDate = startDate;
+        this.startTime =  startTime;
+        this.endDate = endDate;
+        this.endTime = endTime;
         this.type = type;
         this.userId = userId;
     }
@@ -68,6 +82,45 @@ public abstract class ApptOrSchedule {
 
     public ZonedDateTime getEndDateTime() {
         return endDateTime;
+    }
+
+    public String getFormattedStartDateTime(){
+        return Utilities.Time.formatZonedDateTime(getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()));
+    }
+    public String getFormattedEndDateTime(){
+        return Utilities.Time.formatZonedDateTime(getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()));
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getType() {
