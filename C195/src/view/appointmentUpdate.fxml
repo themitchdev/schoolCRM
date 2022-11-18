@@ -34,8 +34,8 @@
       <DatePicker fx:id="startDate" layoutX="108.0" layoutY="225.0" prefHeight="25.0" prefWidth="101.0" />
       <DatePicker fx:id="endDate" layoutX="107.0" layoutY="285.0" prefHeight="25.0" prefWidth="101.0" />
       <ComboBox fx:id="type" editable="true" layoutX="107.0" layoutY="346.0" prefHeight="25.0" prefWidth="179.0" />
-      <Button fx:id="saveBtn" layoutX="107.0" layoutY="376.0" mnemonicParsing="false" onAction="#saveUpdateAppt" text="Save" />
-      <Button fx:id="cancelBtn" layoutX="429.0" layoutY="377.0" mnemonicParsing="false" onAction="#cancelUpdateAppt" text="Cancel" />
+      <Button fx:id="saveBtn" layoutX="55.0" layoutY="416.0" mnemonicParsing="false" onAction="#saveUpdateAppt" text="Save" />
+      <Button fx:id="cancelBtn" layoutX="426.0" layoutY="417.0" mnemonicParsing="false" onAction="#cancelUpdateAppt" text="Cancel" />
       <Label layoutX="44.0" layoutY="260.0" text="Start Time:" />
       <Label layoutX="51.0" layoutY="320.0" text="End Time:" />
       <ComboBox fx:id="startHourCbox" layoutX="107.0" layoutY="254.0" prefHeight="25.0" prefWidth="57.0" />
@@ -45,6 +45,6 @@
       <ComboBox fx:id="startAmPmCbox" layoutX="221.0" layoutY="254.0" prefHeight="25.0" prefWidth="64.0" />
       <ComboBox fx:id="endAmPmCbox" layoutX="222.0" layoutY="315.0" prefHeight="25.0" prefWidth="64.0" />
       <Label layoutX="14.0" layoutY="199.0" prefHeight="17.0" prefWidth="101.0" text="Customer Name:" />
-      <ComboBox fx:id="customerNameCbox" layoutX="107.0" layoutY="194.0" prefHeight="25.0" prefWidth="179.0" />
+      <ComboBox fx:id="customerNameCbox" layoutX="107.0" layoutY="195.0" prefHeight="25.0" prefWidth="179.0" />
    </children>
 </AnchorPane>

@@ -1,5 +1,6 @@
 package controller;
 
+import Utilities.JDBC;
 import Utilities.Misc;
 import Utilities.Time;
 import javafx.event.ActionEvent;
@@ -8,9 +9,12 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import model.Appt;
+import model.Customer;
 import model.DataStore;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class appointmentAdd {
@@ -66,18 +70,16 @@ public class appointmentAdd {
 
     @FXML
     void saveAddAppt(ActionEvent event) {
-        Integer customerID = 0;
-        String title = apptTitle.getText();
-        String description = apptDescription.getText();
-        String location = apptLocation.getText();
-        String contact = contactComboBOx.getValue();
-        String customerName = customerNameCbox.getValue();
-        String type = typeCbox.getValue();
-
-
-
-//        Customer customer = new Customer(customerID, name, address, state, zipcode, phone, country);
-//        DAO.JDBC.saveCustomer(customer);
+//        Integer customerID = 0;
+//        String title = apptTitle.getText();
+//        String description = apptDescription.getText();
+//        String location = apptLocation.getText();
+//        String contact = contactComboBOx.getValue();
+//        String customerName = customerNameCbox.getValue();
+//        String type = typeCbox.getValue();
+//
+//        Appt appt = new Customer(customerID, name, address, state, zipcode, phone, country);
+//        JDBC.saveCustomer();
 //        ResultSet rs = JDBC.runStatement("SELECT Customer_ID FROM customers WHERE Customer_Name= '" + name + "'");
 //        rs.next();
 //        customer.setCustId(rs.getInt("Customer_ID"));

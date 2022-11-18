@@ -34,7 +34,6 @@ public class Main extends Application {
     public static void main(String[] args) throws SQLException {
 
         JDBC.openConnection();
-
         Utilities.JDBC.insert1stLvlDivIntoList(DataStore.usStates, "1");
         Utilities.JDBC.insert1stLvlDivIntoList(DataStore.ukRegions, "2");
         Utilities.JDBC.insert1stLvlDivIntoList(DataStore.caProvinces, "3");
@@ -45,6 +44,7 @@ public class Main extends Application {
             Time.hours.add(String.format("%02d", time));
             time++;
         }
+
 
 
         launch(args);

@@ -142,6 +142,9 @@ public class mainWindow {
     @FXML
     private Button updateContactBtn;
 
+
+
+
     @FXML
     public void addContact(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../view/customerAdd.fxml"));
@@ -157,6 +160,8 @@ public class mainWindow {
 
 
     }
+
+
 
 
     @FXML
@@ -244,23 +249,7 @@ public class mainWindow {
            Misc.dialogAlertInfo("Appointment Update", "You must select a row before clicking the Update button");
 
        }
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(getClass().getResource("../view/appointmentUpdate.fxml"));
-//        loader.load();
-//
-//        appointmentUpdate myController = loader.getController();
-//        myController.getSelectedAppt(apptTable.getSelectionModel().getSelectedItem());
-//
-//        Stage stage = new Stage();
-//        stage.initModality(Modality.WINDOW_MODAL);
-//        stage.initOwner(((Button) event.getSource()).getScene().getWindow());
-//
-//        stage.setScene(new Scene(loader.getRoot(), -1, -1));
-//        stage.setTitle("Update Appointment");
-//        //stage.setScene(scene);
-//        stage.show();
-
-    }
+}
 
     @FXML
     void deleteAppt(ActionEvent event) throws Exception {
@@ -300,17 +289,9 @@ public class mainWindow {
     }
 
     @FXML
-    void getTabIndex() {
-        switch (mainTabs.getSelectionModel().selectedIndexProperty().getValue()) {
-            case 1:
-
-        }
-
-    }
-
-
-    @FXML
     public void initialize() throws SQLException, ParseException {
+        //This is for testing only. this userId must be deleted before running final program
+        Utilities.login.setLoggedInUserId(1);
 
         ResultSet customerResultSet = JDBC.runStatement("SELECT * FROM customers");
         while (customerResultSet.next()) {

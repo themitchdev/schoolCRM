@@ -35,6 +35,8 @@ public class customerUpdate {
     @FXML
     private TextField updateTel;
 
+    private Customer customerFromMainForm;
+
     public void updateCustomer(ActionEvent event) throws Exception {
         Integer custID = Integer.parseInt(customerID.getText());
         String name = updateName.getText();
@@ -58,7 +60,7 @@ public class customerUpdate {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
-    Customer customerFromMainForm;
+
 
     public void getSelectedCustomer(Customer customer) {
 

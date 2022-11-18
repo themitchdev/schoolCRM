@@ -54,6 +54,17 @@ public class DataStore {
         return appointments.remove(obj);
     }
 
+    public static Integer getContactIdfromName(String contactName){
+        ObservableList<Contact> contacts = getAllContacts();
+        Integer contactID = null;
+        for( Contact contact : contacts){
+            if (contact.getContactName().contains(contactName)){
+                contactID = contact.getContactId();
+            }
+        }
+        return contactID;
+    }
+
     public static Appt searchApptById(Integer apptId){
         ObservableList<Appt> allAppts = getAllAppointments();
         Appt foundAppt = null;
@@ -95,4 +106,5 @@ public class DataStore {
             divisionIdHash.put(rs.getString("Division"), rs.getInt("Division_ID"));
         }
     }
+
 }

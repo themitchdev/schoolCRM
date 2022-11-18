@@ -99,6 +99,24 @@ public abstract class JDBC {
 
         }
 
+    public static void saveAppt(Appt appt) throws SQLException {
+        String sql = "INSERT INTO appointments(Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) " +
+                "VALUES(?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appt.getId());
+        ps.setString(2, appt.getTitle());
+        ps.setString(3, appt.getDescription());
+        ps.setString(4, appt.getLocation());
+        ps.setString(5, appt.getType());
+        ps.setTimestamp(6, Timestamp.valueOf(appt.getStartDateTime().toLocalDateTime()));
+        ps.setTimestamp(7, Timestamp.valueOf(appt.getEndDateTime().toLocalDateTime()));
+        ps.setInt(8, appt.getCustId());
+        ps.setInt(9, DataStore.getContactIdfromName(appt.getContact()));
+        ps.setInt(10, appt.getId());
+        ps.execute();
+
+    }
+
     public static void updateCustomerSQL(Customer customer) throws SQLException {
         Integer division_ID = DataStore.divisionIdHash.get(customer.getState());
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone= ?, Division_ID = ? WHERE Customer_ID = ?";
