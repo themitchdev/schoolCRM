@@ -13,9 +13,9 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1500.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.mainWindow">
+<TabPane fx:id="mainTabs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#getTabIndex" prefHeight="720.0" prefWidth="1500.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.mainWindow">
   <tabs>
-    <Tab styleClass="tab:focused" text="Customers">
+    <Tab fx:id="customerTab" styleClass="tab:focused" text="Customers">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="691.0" prefWidth="91500.0" stylesheets="@style.css">
                <children>
@@ -41,7 +41,7 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab text="Appointments">
+    <Tab fx:id="apptTab" text="Appointments">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -71,7 +71,7 @@
                         <ComboBox layoutX="943.0" layoutY="18.0" prefWidth="150.0" />
                      </children>
                   </Pane>
-                  <TableView fx:id="apptTable" layoutX="109.0" layoutY="52.0" prefHeight="641.0" prefWidth="1392.0">
+                  <TableView fx:id="apptTable" layoutX="109.0" layoutY="55.0" prefHeight="641.0" prefWidth="1392.0">
                     <columns>
                       <TableColumn fx:id="apptIdCol" prefWidth="102.0" text="Appointment ID" />
                       <TableColumn fx:id="apptTitleCol" prefWidth="166.0" text="Title" />
@@ -94,7 +94,7 @@
                </children></AnchorPane>
       </content>
     </Tab>
-      <Tab text="Reports">
+      <Tab fx:id="reportsTab" text="Reports">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>

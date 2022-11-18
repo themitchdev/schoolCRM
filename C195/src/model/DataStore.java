@@ -54,6 +54,17 @@ public class DataStore {
         return appointments.remove(obj);
     }
 
+    public static Appt searchApptById(Integer apptId){
+        ObservableList<Appt> allAppts = getAllAppointments();
+        Appt foundAppt = null;
+        for(Appt appt : allAppts){
+            if(appt.getId() == apptId){
+                foundAppt = appt;
+            }
+        }
+        return foundAppt;
+    }
+
     public static ObservableList<Schedule> lookupScheduleByContactId(int contactId){
         ObservableList<Schedule> schedulesFound = FXCollections.observableArrayList();
         for (Schedule schedule : schedules) {

@@ -6,6 +6,8 @@ import model.Customer;
 import model.DataStore;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class JDBC {
     private static final String protocol = "jdbc";
@@ -144,14 +146,17 @@ public abstract class JDBC {
         return false;
     }
 
-    public static void deleteAllApptWithCustId(Integer custId) throws Exception {
+    public static List<Integer> deleteAllApptWithCustId(Integer custId) throws Exception {
         String sql = "SELECT Appointment_ID FROM appointments WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, String.valueOf(custId));
         ResultSet rs = ps.executeQuery();
+        List<Integer> apptIds = new ArrayList<>();
         while(rs.next()){
+            apptIds.add(rs.getInt("Appointment_ID"));
             deleteAppointmentSQL(rs.getInt("Appointment_ID"));
         }
+        return apptIds;
     }
 
 }

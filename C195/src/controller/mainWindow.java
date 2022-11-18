@@ -2,6 +2,7 @@ package controller;
 
 import Utilities.JDBC;
 import Utilities.Misc;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,12 +19,17 @@ import model.Appt;
 import model.Contact;
 import model.Customer;
 import model.DataStore;
+
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Optional;
 
 public class mainWindow {
+    @FXML
+    private TabPane mainTabs;
 
     @FXML
     private CheckBox allChkBox;
@@ -39,6 +45,9 @@ public class mainWindow {
 
     @FXML
     private Button addContactBtn;
+
+    @FXML
+    private Tab apptTab;
 
     @FXML
     private TableView<Appt> apptTable;
@@ -149,6 +158,7 @@ public class mainWindow {
 
     }
 
+
     @FXML
     public void updateContact(ActionEvent event) throws IOException {
 
@@ -181,10 +191,15 @@ public class mainWindow {
             Optional<ButtonType> btnSelected = Misc.dialogAlertConfirm("Delete Customer", "Are you sure want to delete this Customer");
             if (btnSelected.get() == ButtonType.OK){
                 if(JDBC.isCustIdInApptTbl(tempCustomer.getCustId())){
-                    JDBC.deleteAllApptWithCustId(tempCustomer.getCustId());
+                    List<Integer> apptIdList = JDBC.deleteAllApptWithCustId(tempCustomer.getCustId());
+                    for(int id : apptIdList){
+                        Appt foundAppt = DataStore.searchApptById(id);
+                        DataStore.deleteAppt(foundAppt);
+                    }
                 }
                 JDBC.deleteCustomerSQL(tempCustomer);
                 DataStore.deleteCustomer(tempCustomer);
+
             }
         }else{
             Misc.dialogAlertInfo("Delete Customer", "You must select a row before clicking the Delete button");
@@ -284,6 +299,15 @@ public class mainWindow {
         }
     }
 
+    @FXML
+    void getTabIndex() {
+        switch (mainTabs.getSelectionModel().selectedIndexProperty().getValue()) {
+            case 1:
+
+        }
+
+    }
+
 
     @FXML
     public void initialize() throws SQLException, ParseException {
@@ -347,6 +371,8 @@ public class mainWindow {
                                              rsContact.getString("Email")));
 
         }
+
+
 
 
     }
