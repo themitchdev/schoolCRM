@@ -20,31 +20,33 @@
             </Label>
          </children>
       </Pane>
-      <Label layoutX="62.0" layoutY="77.0" prefHeight="17.0" prefWidth="32.0" text="Title:" />
-      <Label layoutX="26.0" layoutY="107.0" prefHeight="17.0" prefWidth="68.0" text="Description:" />
-      <Label layoutX="39.0" layoutY="138.0" prefHeight="17.0" prefWidth="52.0" text="Location:" />
-      <Label layoutX="44.0" layoutY="168.0" prefHeight="17.0" prefWidth="52.0" text="Contact:" />
-      <Label layoutX="1.0" layoutY="199.0" prefHeight="17.0" prefWidth="91.0" text="Customer Name:" />
-      <Label layoutX="32.0" layoutY="231.0" prefHeight="17.0" prefWidth="62.0" text="Start Date:" />
-      <Label layoutX="38.0" layoutY="293.0" prefHeight="17.0" prefWidth="62.0" text="End Date:" />
-      <Label layoutX="62.0" layoutY="355.0" prefHeight="17.0" prefWidth="32.0" text="Type:" />
-      <TextField fx:id="apptTitle" layoutX="94.0" layoutY="73.0" prefHeight="25.0" prefWidth="374.0" />
-      <TextField fx:id="apptDescription" layoutX="94.0" layoutY="103.0" prefHeight="25.0" prefWidth="374.0" />
-      <TextField fx:id="apptLocation" layoutX="94.0" layoutY="134.0" prefHeight="25.0" prefWidth="374.0" />
-      <ComboBox fx:id="contactComboBOx" layoutX="94.0" layoutY="164.0" prefHeight="25.0" prefWidth="179.0" />
-      <DatePicker fx:id="apptStartDate" editable="false" layoutX="94.0" layoutY="227.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="103.0" />
-      <DatePicker fx:id="apptEndDate" editable="false" layoutX="94.0" layoutY="289.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="103.0" />
-      <ComboBox fx:id="typeCbox" editable="true" layoutX="94.0" layoutY="351.0" prefHeight="25.0" prefWidth="179.0" />
-      <Button fx:id="saveAddAppt" layoutX="54.0" layoutY="429.0" mnemonicParsing="false" onAction="#saveAddAppt" text="Save" />
-      <Button fx:id="cancelAddApptBtn" layoutX="416.0" layoutY="429.0" mnemonicParsing="false" onAction="#cancelAddAppt" text="Cancel" />
-      <Label layoutX="32.0" layoutY="265.0" text="Start Time:" />
-      <Label layoutX="37.0" layoutY="325.0" text="End Time:" />
-      <ComboBox fx:id="startHourCbox" layoutX="95.0" layoutY="258.0" prefHeight="25.0" prefWidth="57.0" />
-      <ComboBox fx:id="endHourCbox" layoutX="94.0" layoutY="320.0" prefHeight="25.0" prefWidth="57.0" />
-      <ComboBox fx:id="startMinCbox" layoutX="152.0" layoutY="258.0" prefHeight="25.0" prefWidth="57.0" />
-      <ComboBox fx:id="endMinCbox" layoutX="151.0" layoutY="320.0" prefHeight="25.0" prefWidth="57.0" />
-      <ComboBox fx:id="startAmPmCbox" layoutX="209.0" layoutY="258.0" prefHeight="25.0" prefWidth="64.0" />
-      <ComboBox fx:id="endAmPmCbox" layoutX="208.0" layoutY="320.0" prefHeight="25.0" prefWidth="64.0" />
-      <ComboBox fx:id="customerNameCbox" layoutX="94.0" layoutY="194.0" prefHeight="25.0" prefWidth="179.0" />
+      <Label layoutX="75.0" layoutY="77.0" prefHeight="17.0" prefWidth="32.0" text="Title:" />
+      <Label layoutX="39.0" layoutY="107.0" prefHeight="17.0" prefWidth="68.0" text="Description:" />
+      <Label layoutX="52.0" layoutY="138.0" prefHeight="17.0" prefWidth="52.0" text="Location:" />
+      <Label layoutX="57.0" layoutY="168.0" prefHeight="17.0" prefWidth="52.0" text="Contact:" />
+      <Label layoutX="14.0" layoutY="199.0" prefHeight="17.0" prefWidth="91.0" text="Customer Name:" />
+      <Label layoutX="45.0" layoutY="231.0" prefHeight="17.0" prefWidth="62.0" text="Start Date:" />
+      <Label layoutX="51.0" layoutY="293.0" prefHeight="17.0" prefWidth="62.0" text="End Date:" />
+      <Label layoutX="75.0" layoutY="355.0" prefHeight="17.0" prefWidth="32.0" text="Type:" />
+      <TextField fx:id="apptTitle" layoutX="107.0" layoutY="73.0" prefHeight="25.0" prefWidth="374.0" />
+      <TextField fx:id="apptDescription" layoutX="107.0" layoutY="103.0" prefHeight="25.0" prefWidth="374.0" />
+      <TextField fx:id="apptLocation" layoutX="107.0" layoutY="134.0" prefHeight="25.0" prefWidth="374.0" />
+      <ComboBox fx:id="contactComboBox" layoutX="107.0" layoutY="164.0" prefHeight="25.0" prefWidth="179.0" />
+      <DatePicker fx:id="apptStartDate" editable="false" layoutX="107.0" layoutY="227.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="103.0" />
+      <DatePicker fx:id="apptEndDate" editable="false" layoutX="107.0" layoutY="289.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="103.0" />
+      <ComboBox fx:id="typeCbox" editable="true" layoutX="107.0" layoutY="351.0" prefHeight="25.0" prefWidth="179.0" />
+      <Button fx:id="saveAddAppt" layoutX="67.0" layoutY="429.0" mnemonicParsing="false" onAction="#saveAddAppt" text="Save" />
+      <Button fx:id="cancelAddApptBtn" layoutX="429.0" layoutY="429.0" mnemonicParsing="false" onAction="#cancelAddAppt" text="Cancel" />
+      <Label layoutX="45.0" layoutY="265.0" text="Start Time:" />
+      <Label layoutX="50.0" layoutY="325.0" text="End Time:" />
+      <ComboBox fx:id="startHourCbox" layoutX="108.0" layoutY="258.0" prefHeight="25.0" prefWidth="57.0" />
+      <ComboBox fx:id="endHourCbox" layoutX="107.0" layoutY="320.0" prefHeight="25.0" prefWidth="57.0" />
+      <ComboBox fx:id="startMinCbox" layoutX="165.0" layoutY="258.0" prefHeight="25.0" prefWidth="57.0" />
+      <ComboBox fx:id="endMinCbox" layoutX="164.0" layoutY="320.0" prefHeight="25.0" prefWidth="57.0" />
+      <ComboBox fx:id="startAmPmCbox" layoutX="222.0" layoutY="258.0" prefHeight="25.0" prefWidth="64.0" />
+      <ComboBox fx:id="endAmPmCbox" layoutX="221.0" layoutY="320.0" prefHeight="25.0" prefWidth="64.0" />
+      <ComboBox fx:id="customerNameCbox" layoutX="107.0" layoutY="194.0" onAction="#getCustIdfromCustNameCbox" prefHeight="25.0" prefWidth="179.0" />
+      <Label layoutX="294.0" layoutY="199.0" prefHeight="17.0" prefWidth="80.0" text="Customer ID:" />
+      <TextField fx:id="apptCustId" layoutX="366.0" layoutY="195.0" prefHeight="25.0" prefWidth="41.0" />
    </children>
 </AnchorPane>

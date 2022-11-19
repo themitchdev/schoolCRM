@@ -89,31 +89,36 @@ public abstract class JDBC {
         Integer division_ID = DataStore.divisionIdHash.get(customer.getState());
         String sql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Division_ID) " +
                          "VALUES(?,?,?,?,?)";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, customer.getCustName());
         ps.setString(2, customer.getAddress());
         ps.setString(3, customer.getZipcode());
         ps.setString(4, customer.getPhone());
         ps.setInt(5, division_ID);
-        ps.execute();
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        if(rs.next())
+            customer.setCustId(rs.getInt(1));
 
         }
 
     public static void saveAppt(Appt appt) throws SQLException {
-        String sql = "INSERT INTO appointments(Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) " +
-                "VALUES(?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, appt.getId());
-        ps.setString(2, appt.getTitle());
-        ps.setString(3, appt.getDescription());
-        ps.setString(4, appt.getLocation());
-        ps.setString(5, appt.getType());
-        ps.setTimestamp(6, Timestamp.valueOf(appt.getStartDateTime().toLocalDateTime()));
-        ps.setTimestamp(7, Timestamp.valueOf(appt.getEndDateTime().toLocalDateTime()));
-        ps.setInt(8, appt.getCustId());
+        String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) " +
+                "VALUES(?,?,?,?,?,?,?,?,?)";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, appt.getTitle());
+        ps.setString(2, appt.getDescription());
+        ps.setString(3, appt.getLocation());
+        ps.setString(4, appt.getType());
+        ps.setTimestamp(5, Timestamp.valueOf(appt.getStartDateTime().toLocalDateTime()));
+        ps.setTimestamp(6, Timestamp.valueOf(appt.getEndDateTime().toLocalDateTime()));
+        ps.setInt(7, appt.getCustId());
+        ps.setInt(8, login.getLoggedInUserID());
         ps.setInt(9, DataStore.getContactIdfromName(appt.getContact()));
-        ps.setInt(10, appt.getId());
-        ps.execute();
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        if(rs.next())
+            appt.setId(rs.getInt(1));
 
     }
 

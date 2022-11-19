@@ -34,6 +34,9 @@ public class appointmentUpdate {
     private ComboBox<String> customerNameCbox;
 
     @FXML
+    private TextField apptCustId;
+
+    @FXML
     private DatePicker startDate;
 
     @FXML

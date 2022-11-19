@@ -55,9 +55,6 @@ public class customerAdd {
 
         Customer customer = new Customer(customerID, name, address, state, zipcode, phone, country);
         JDBC.saveCustomer(customer);
-        ResultSet rs = JDBC.runStatement("SELECT Customer_ID FROM customers WHERE Customer_Name= '" + name + "'");
-        rs.next();
-        customer.setCustId(rs.getInt("Customer_ID"));
         DataStore.addCustomer(customer);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

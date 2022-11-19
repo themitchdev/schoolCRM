@@ -13,8 +13,8 @@ public class Time {
     private static final LocalTime timeClose = LocalTime.of(22,0);
     private static final ZonedDateTime zdtOpen = ZonedDateTime.of(date, timeOpen, ZoneId.of ("America/New_York" ));
     private static final ZonedDateTime zdtClose = ZonedDateTime.of(date, timeClose, ZoneId.of ("America/New_York" ));
-    public static final LocalTime businessTimeOpen = zdtOpen.withZoneSameInstant(ZoneId.systemDefault()).toLocalTime();
-    public static final LocalTime businessTimeClose = zdtClose.withZoneSameInstant(ZoneId.systemDefault()).toLocalTime();
+    public static final LocalTime userSysTimeOpen = zdtOpen.withZoneSameInstant(ZoneId.systemDefault()).toLocalTime();
+    public static final LocalTime userSysTimeClose = zdtClose.withZoneSameInstant(ZoneId.systemDefault()).toLocalTime();
 
     public static final ObservableList<String> minutes = FXCollections.observableArrayList("00", "15", "30", "45");
     public static final ObservableList<String> hours = FXCollections.observableArrayList();
