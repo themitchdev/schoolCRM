@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public abstract class login {
+public abstract class Login {
 
     private static Integer loggedInUserID;
 

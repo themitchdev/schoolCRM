@@ -1,8 +1,9 @@
 package controller;
 
 import Utilities.JDBC;
+import Utilities.Login;
 import Utilities.Misc;
-import Utilities.Time;
+import Utilities.MyTime;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,8 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appt;
-import model.Contact;
-import model.Customer;
 import model.DataStore;
 
 import java.io.IOException;
@@ -86,22 +85,42 @@ public class appointmentAdd {
         stage.close();
     }
 
+
     @FXML
     void saveAddAppt(ActionEvent event) throws SQLException {
+        boolean isOverlap = false;
         Integer apptID = 0;
-        String title = apptTitle.getText();
-        String description = apptDescription.getText();
-        String location = apptLocation.getText();
-        String contact = contactComboBox.getValue();
-        String type = typeCbox.getValue();
-        Integer custId = Integer.parseInt(apptCustId.getText());
-        Integer userId = Utilities.login.getLoggedInUserID();
-        LocalDate startDate = apptStartDate.getValue();
-        LocalTime startTime = LocalTime.of(Integer.parseInt(startHourCbox.getValue()), Integer.parseInt(startMinCbox.getValue()));
-        LocalDate endDate = apptEndDate.getValue();
-        LocalTime endTime = LocalTime.of(Integer.parseInt(endHourCbox.getValue()), Integer.parseInt(endMinCbox.getValue()));
-        ZonedDateTime startDateTime = ZonedDateTime.of(startDate, startTime, ZoneId.systemDefault());
-        ZonedDateTime endDateTime = ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault());;
+        String title = null;
+        String description = null;
+        String location = null;
+        String contact = null;
+        String type = null;
+        Integer custId = null;
+        Integer userId = null;
+        LocalDate startDate = null;
+        LocalTime startTime = null;
+        LocalDate endDate = null;
+        LocalTime endTime = null;
+        ZonedDateTime startDateTime = null;
+        ZonedDateTime endDateTime = null;
+
+        boolean isTrue= true;
+        while (isTrue) {
+            try {
+                title = apptTitle.getText();
+                description = apptDescription.getText();
+                location = apptLocation.getText();
+                contact = contactComboBox.getValue();
+                type = typeCbox.getValue();
+                custId = Integer.parseInt(apptCustId.getText());
+                userId = Login.getLoggedInUserID();
+                startDate = apptStartDate.getValue();
+                startTime = LocalTime.of(Integer.parseInt(startHourCbox.getValue()), Integer.parseInt(startMinCbox.getValue()));
+                endDate = apptEndDate.getValue();
+                endTime = LocalTime.of(Integer.parseInt(endHourCbox.getValue()), Integer.parseInt(endMinCbox.getValue()));
+                startDateTime = MyTime.fromUserTimetoUTC(ZonedDateTime.of(startDate, startTime, ZoneId.systemDefault()));
+                endDateTime = MyTime.fromUserTimetoUTC(ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault()));
+
 
         Appt appt = new Appt(apptID,
                              title,
@@ -117,25 +136,28 @@ public class appointmentAdd {
                              endTime,
                              type,
                              userId);
-        JDBC.saveAppt(appt);
-        DataStore.addAppt(appt);
 
-//        ResultSet rs = JDBC.runStatement("SELECT Customer_ID FROM customers WHERE Customer_Name= '" + name + "'");
-//        rs.next();
-//        customer.setCustId(rs.getInt("Customer_ID"));
-//
-//
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        //System.out.println("New appt time is: " + appt.getStartDateTime());
+        if (!MyTime.isApptOverlap(appt)) {
+            JDBC.saveAppt(appt);
+            DataStore.addAppt(appt);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+            break;
+        }
+            } catch (Exception e) {
+                Misc.dialogAlertInfo("Input Error", "Invalid input or blank input in form");
+                isTrue = false;
+            }
+        }
     }
 
     public void initialize() throws SQLException {
-        startHourCbox.setItems(Time.hours);
-        startMinCbox.setItems(Time.minutes);
-        endHourCbox.setItems(Time.hours);
-        endMinCbox.setItems(Time.minutes);
-        startAmPmCbox.setItems(Time.amOrPm);
-        endAmPmCbox.setItems(Time.amOrPm);
+        startHourCbox.setItems(MyTime.hours);
+        startMinCbox.setItems(MyTime.minutes);
+        endHourCbox.setItems(MyTime.hours);
+        endMinCbox.setItems(MyTime.minutes);
         Misc.buildCustomerNameList();
         Misc.buildApptTypeList();
         Misc.buildContactNameList();

@@ -1,9 +1,7 @@
 package model;
 
-import org.w3c.dom.html.HTMLImageElement;
+import Utilities.MyTime;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.*;
 
 public abstract class ApptOrSchedule {
@@ -85,10 +83,10 @@ public abstract class ApptOrSchedule {
     }
 
     public String getFormattedStartDateTime(){
-        return Utilities.Time.formatZonedDateTime(getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()));
+        return MyTime.formatZonedDateTime(getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()));
     }
     public String getFormattedEndDateTime(){
-        return Utilities.Time.formatZonedDateTime(getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()));
+        return MyTime.formatZonedDateTime(getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()));
     }
 
     public LocalDate getStartDate() {

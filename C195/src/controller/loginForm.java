@@ -1,6 +1,6 @@
 package controller;
 
-import Utilities.login;
+import Utilities.Login;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -79,7 +79,7 @@ public class loginForm {
         String uname = userName.getText();
         String pword = password.getText();
 
-        if(login.validateUserPassword(uname, pword)) {
+        if(Login.validateUserPassword(uname, pword)) {
             Parent root = FXMLLoader.load(getClass().getResource("../view/mainWindow.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, -1, -1);

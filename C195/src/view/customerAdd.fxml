@@ -31,7 +31,7 @@
       <ComboBox fx:id="addState" layoutX="94.0" layoutY="227.0" prefWidth="150.0" visibleRowCount="4" />
       <ComboBox fx:id="addCountry" layoutX="94.0" layoutY="196.0" onAction="#setStateComboBox" prefWidth="150.0" visibleRowCount="3" />
       <TextField fx:id="addTel" layoutX="94.0" layoutY="259.0" prefHeight="25.0" prefWidth="374.0" />
-      <Button fx:id="saveAddCustBtn" layoutX="143.0" layoutY="317.0" mnemonicParsing="false" onAction="#saveCustomer" text="Save" />
+      <Button layoutX="143.0" layoutY="317.0" mnemonicParsing="false" onAction="#saveCustomer" text="Save" />
       <Button fx:id="cancelAddCustBtn" layoutX="363.0" layoutY="317.0" mnemonicParsing="false" onAction="#cancelAddCust" text="Cancel" />
    </children>
 </AnchorPane>

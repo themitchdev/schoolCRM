@@ -2,12 +2,16 @@ package Utilities;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Appt;
+import model.DataStore;
 
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 
-public class Time {
+public class MyTime {
     private static final LocalDate date = LocalDate.now();
     private static final LocalTime timeOpen = LocalTime.of(8,0);
     private static final LocalTime timeClose = LocalTime.of(22,0);
@@ -30,6 +34,11 @@ public class Time {
         return zdt.withZoneSameInstant(ZoneId.systemDefault());
     }
 
+    public static ZonedDateTime fromUserTimetoUTC(ZonedDateTime userTime){
+        ZonedDateTime zdt = userTime.withZoneSameInstant(ZoneId.of("UTC"));
+        return zdt;
+    }
+
     public static String formatZonedDateTime(ZonedDateTime dateTime){
         String formattedDateTime = dateTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a"));
         return formattedDateTime;
@@ -45,6 +54,31 @@ public class Time {
 
     public static String formatAMorPM(LocalTime time){
         return time.format(DateTimeFormatter.ofPattern("a"));
+    }
+
+    public static boolean isThereAppt15InMins(LocalTime now, LocalTime apptStartTime){
+        long timeDiff = ChronoUnit.MINUTES.between(apptStartTime, now);
+        if (timeDiff <= 15) return true;
+        return false;
+    }
+
+    public static boolean isApptOverlap(Appt newAppt){
+        ZonedDateTime newStartDateTime = ZonedDateTime.of(newAppt.getStartDate(), newAppt.getStartTime(), ZoneId.systemDefault());
+        ZonedDateTime newEndDateTime = ZonedDateTime.of(newAppt.getEndDate(), newAppt.getEndTime(), ZoneId.systemDefault());
+
+        ObservableList<Appt> tempApptList = DataStore.getAllAppointments();
+        for(Appt appt : tempApptList){
+            if((newStartDateTime.isAfter(appt.getStartDateTime())
+                    && newStartDateTime.isBefore(appt.getEndDateTime()))
+                    || (newEndDateTime.isAfter(appt.getStartDateTime())
+                    && newEndDateTime.isBefore(appt.getEndDateTime()))
+                    || (newStartDateTime.isBefore(appt.getStartDateTime())
+                    && newEndDateTime.isAfter(appt.getEndDateTime()))){
+                Misc.dialogAlertInfo("Appointment Time Overlap", "This appointment overlaps with Appointment ID #" + appt.getId());
+                return true;
+            }
+        }
+        return false;
     }
 
 

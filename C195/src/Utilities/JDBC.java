@@ -113,7 +113,7 @@ public abstract class JDBC {
         ps.setTimestamp(5, Timestamp.valueOf(appt.getStartDateTime().toLocalDateTime()));
         ps.setTimestamp(6, Timestamp.valueOf(appt.getEndDateTime().toLocalDateTime()));
         ps.setInt(7, appt.getCustId());
-        ps.setInt(8, login.getLoggedInUserID());
+        ps.setInt(8, Login.getLoggedInUserID());
         ps.setInt(9, DataStore.getContactIdfromName(appt.getContact()));
         ps.executeUpdate();
         ResultSet rs = ps.getGeneratedKeys();
@@ -134,6 +134,22 @@ public abstract class JDBC {
         ps.setInt(6, customer.getCustId());
         ps.execute();
     }
+
+    public static void updateApptSQL(Appt appt) throws SQLException {
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type= ?, Start = ?, End = ?, Customer_ID = ?, Contact_ID = ?  WHERE Appointment_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, appt.getTitle());
+        ps.setString(2, appt.getDescription());
+        ps.setString(3, appt.getLocation());
+        ps.setString(4, appt.getType());
+        ps.setTimestamp(5, Timestamp.valueOf(appt.getStartDateTime().toLocalDateTime()));
+        ps.setTimestamp(6, Timestamp.valueOf(appt.getEndDateTime().toLocalDateTime()));
+        ps.setInt(7, appt.getCustId());
+        ps.setInt(8, DataStore.getContactIdfromName(appt.getContact()));
+        ps.setInt(9, appt.getId());
+        ps.execute();
+    }
+
     public static void deleteCustomerSQL(Customer customer) throws Exception {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);

@@ -1,15 +1,18 @@
 package model;
 
 import Utilities.JDBC;
+import Utilities.Login;
 import Utilities.Misc;
-import Utilities.Time;
+import Utilities.MyTime;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -28,6 +31,14 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, primaryStage.getHeight(), primaryStage.getWidth()));
         primaryStage.show();
 
+        //Use localTime and localdate from object list, these have been converted to user's timezone
+        ObservableList<Appt> myApptList = DataStore.getAllAppointments();
+        for(Appt appt : myApptList){
+            if (Login.getLoggedInUserID() == appt.getUserId() && MyTime.isThereAppt15InMins(LocalTime.now(), appt.getStartTime())){
+                Misc.dialogAlertInfo("Appointment  Alert", "You have an appointment soon");
+            }
+        }
+
     }
 
 
@@ -41,7 +52,7 @@ public class Main extends Application {
 
         Integer time = 8;
         while(time < 22){
-            Time.hours.add(String.format("%02d", time));
+            MyTime.hours.add(String.format("%02d", time));
             time++;
         }
 

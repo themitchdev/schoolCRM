@@ -1,46 +1,48 @@
 package controller;
 
 import Utilities.JDBC;
+import Utilities.Login;
 import Utilities.Misc;
-import Utilities.Time;
+import Utilities.MyTime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appt;
-import model.Contact;
 import model.DataStore;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 
 public class appointmentUpdate {
 
     @FXML
-    private TextField title;
+    private TextField apptTitle;
 
     @FXML
-    private TextField description;
+    private TextField apptDescription;
 
     @FXML
-    private TextField apptlocation;
+    private TextField apptLocation;
 
     @FXML
-    private ComboBox<String> contactComboBOx;
+    private ComboBox<String> contactComboBox;
 
     @FXML
-    private ComboBox<String> customerNameCbox;
+    private DatePicker apptStartDate;
 
     @FXML
-    private TextField apptCustId;
+    private DatePicker apptEndDate;
 
     @FXML
-    private DatePicker startDate;
-
-    @FXML
-    private DatePicker endDate;
+    private ComboBox<String> typeCbox;
 
     @FXML
     private ComboBox<String> startHourCbox;
@@ -55,59 +57,131 @@ public class appointmentUpdate {
     private ComboBox<String> endMinCbox;
 
     @FXML
-    private ComboBox<String> startAmPmCbox;
+    private ComboBox<String> customerNameCbox;
 
     @FXML
-    private ComboBox<String> endAmPmCbox;
+    private TextField apptCustId;
 
     @FXML
-    private ComboBox<String> type;
-
+    void getCustIdfromCustNameCbox(ActionEvent e) throws IOException, SQLException {
+        String custName = customerNameCbox.getValue();
+        String sql = "SELECT Customer_ID, Customer_Name FROM customers WHERE Customer_Name = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, custName);
+        ResultSet rs = ps.executeQuery();
+        apptCustId.setText(rs.next() ? rs.getString("Customer_ID") : "error");
+    }
 
     @FXML
     void cancelUpdateAppt(ActionEvent event) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+    private Appt apptFromMainForm;
 
     @FXML
-    void saveUpdateAppt(ActionEvent event) {
+    void saveUpdateAppt(ActionEvent event) throws Exception {
+        boolean isOverlap = false;
 
+        String title = null;
+        String description = null;
+        String location = null;
+        String contact = null;
+        String type = null;
+        Integer custId = null;
+        Integer userId = null;
+        LocalDate startDate = null;
+        LocalTime startTime = null;
+        LocalDate endDate = null;
+        LocalTime endTime = null;
+        ZonedDateTime startDateTime = null;
+        ZonedDateTime endDateTime = null;
+
+        boolean isTrue= true;
+        while (isTrue) {
+            try {
+                Integer apptID = apptFromMainForm.getId();
+                title = apptTitle.getText();
+                description = apptDescription.getText();
+                location = apptLocation.getText();
+                contact = contactComboBox.getValue();
+                type = typeCbox.getValue();
+                custId = Integer.parseInt(apptCustId.getText());
+                userId = Login.getLoggedInUserID();
+                startDate = apptStartDate.getValue();
+                startTime = LocalTime.of(Integer.parseInt(startHourCbox.getValue()), Integer.parseInt(startMinCbox.getValue()));
+                endDate = apptEndDate.getValue();
+                endTime = LocalTime.of(Integer.parseInt(endHourCbox.getValue()), Integer.parseInt(endMinCbox.getValue()));
+                startDateTime = MyTime.fromUserTimetoUTC(ZonedDateTime.of(startDate, startTime, ZoneId.systemDefault()));
+                endDateTime = MyTime.fromUserTimetoUTC(ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault()));
+
+
+                Appt appt = new Appt(apptID,
+                                     title,
+                                     description,
+                                     location,
+                                     contact,
+                                     custId,
+                                     startDateTime,
+                                     endDateTime,
+                                     startDate,
+                                     startTime,
+                                     endDate,
+                                     endTime,
+                                     type,
+                                     userId);
+
+                //System.out.println("New appt time is: " + appt.getStartDateTime());
+                if (!MyTime.isApptOverlap(appt)) {
+                    JDBC.updateApptSQL(appt);
+
+
+                    Integer custObjIndex = DataStore.getAllAppointments().indexOf(apptFromMainForm);
+                    DataStore.updateAppt(custObjIndex, appt);
+
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.close();
+                    break;
+                }
+            } catch (Exception e) {
+                Misc.dialogAlertInfo("Input Error", "Invalid input or blank input in form");
+                System.out.println(e);
+                isTrue = false;
+            }
+        }
 
     }
 
     void getSelectedAppt(Appt appt) throws SQLException {
-        title.setText(appt.getTitle());
-        description.setText(appt.getDescription());
-        apptlocation.setText(appt.getLocation());
-        contactComboBOx.getSelectionModel().select(appt.getContact());
+        apptFromMainForm = appt;
+        apptTitle.setText(appt.getTitle());
+        apptDescription.setText(appt.getDescription());
+        apptLocation.setText(appt.getLocation());
+        contactComboBox.getSelectionModel().select(appt.getContact());
         customerNameCbox.getSelectionModel().select(JDBC.getCustNameFromCustId(appt.getCustId()));
-        startDate.setValue(appt.getStartDate());
-        endDate.setValue(appt.getEndDate());
+        apptStartDate.setValue(appt.getStartDate());
+        apptEndDate.setValue(appt.getEndDate());
         startHourCbox.getSelectionModel().select(String.format("%02d", appt.getStartTime().getHour()));
         startMinCbox.getSelectionModel().select(String.format("%02d", appt.getStartTime().getMinute()));
-        startAmPmCbox.getSelectionModel().select(Time.formatAMorPM(appt.getStartTime()));
         endHourCbox.getSelectionModel().select(String.format("%02d", appt.getEndTime().getHour()));
         endMinCbox.getSelectionModel().select(String.format("%02d", appt.getEndTime().getMinute()));
-        endAmPmCbox.getSelectionModel().select(Time.formatAMorPM(appt.getEndTime()));
-        type.getSelectionModel().select(appt.getType());
+        typeCbox.getSelectionModel().select(appt.getType());
+        customerNameCbox.fireEvent(new ActionEvent());
 
     }
 
     @FXML
     public void initialize() throws SQLException {
-        startHourCbox.setItems(Time.hours);
-        startMinCbox.setItems(Time.minutes);
-        endHourCbox.setItems(Time.hours);
-        endMinCbox.setItems(Time.minutes);
-        startAmPmCbox.setItems(Time.amOrPm);
-        endAmPmCbox.setItems(Time.amOrPm);
+        startHourCbox.setItems(MyTime.hours);
+        startMinCbox.setItems(MyTime.minutes);
+        endHourCbox.setItems(MyTime.hours);
+        endMinCbox.setItems(MyTime.minutes);
         Misc.buildCustomerNameList();
         Misc.buildApptTypeList();
         Misc.buildContactNameList();
-        type.setItems(DataStore.appointmentType);
+        typeCbox.setItems(DataStore.appointmentType);
         customerNameCbox.setItems(DataStore.customerNames);
-        contactComboBOx.setItems(DataStore.contactNames);
+        contactComboBox.setItems(DataStore.contactNames);
 
         }
 

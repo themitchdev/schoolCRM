@@ -1,7 +1,9 @@
 package controller;
 
 import Utilities.JDBC;
+import Utilities.Login;
 import Utilities.Misc;
+import Utilities.MyTime;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,15 +17,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.Appt;
-import model.Contact;
-import model.Customer;
-import model.DataStore;
+import model.*;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -291,7 +290,7 @@ public class mainWindow {
     @FXML
     public void initialize() throws SQLException, ParseException {
         //This is for testing only. this userId must be deleted before running final program
-        Utilities.login.setLoggedInUserId(1);
+        Login.setLoggedInUserId(1);
 
         ResultSet customerResultSet = JDBC.runStatement("SELECT * FROM customers");
         while (customerResultSet.next()) {
@@ -323,12 +322,12 @@ public class mainWindow {
                                        apptResultSet.getString("Location"),
                                        JDBC.apptGetContactName(apptResultSet.getInt("Appointment_ID")),
                                        apptResultSet.getInt("Customer_ID"),
-                                       Utilities.Time.fromSQLtoUTC(apptResultSet.getTimestamp("Start")),
-                                       Utilities.Time.fromSQLtoUTC(apptResultSet.getTimestamp("End")),
-                                       Utilities.Time.fromSQLtoUserTime(apptResultSet.getTimestamp("Start")).toLocalDate(),
-                                       Utilities.Time.fromSQLtoUserTime(apptResultSet.getTimestamp("Start")).toLocalTime(),
-                                       Utilities.Time.fromSQLtoUserTime(apptResultSet.getTimestamp("End")).toLocalDate(),
-                                       Utilities.Time.fromSQLtoUserTime(apptResultSet.getTimestamp("End")).toLocalTime(),
+                                       MyTime.fromSQLtoUTC(apptResultSet.getTimestamp("Start")),
+                                       MyTime.fromSQLtoUTC(apptResultSet.getTimestamp("End")),
+                                       MyTime.fromSQLtoUserTime(apptResultSet.getTimestamp("Start")).toLocalDate(),
+                                       MyTime.fromSQLtoUserTime(apptResultSet.getTimestamp("Start")).toLocalTime(),
+                                       MyTime.fromSQLtoUserTime(apptResultSet.getTimestamp("End")).toLocalDate(),
+                                       MyTime.fromSQLtoUserTime(apptResultSet.getTimestamp("End")).toLocalTime(),
                                        apptResultSet.getString("Type"),
                                        apptResultSet.getInt("User_ID")));
 
@@ -352,6 +351,8 @@ public class mainWindow {
                                              rsContact.getString("Email")));
 
         }
+
+
 
 
 
