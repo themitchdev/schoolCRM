@@ -4,8 +4,10 @@ import Utilities.JDBC;
 import Utilities.Login;
 import Utilities.Misc;
 import Utilities.MyTime;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -19,34 +21,25 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.*;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 public class mainWindow {
-    @FXML
-    private TabPane mainTabs;
 
     @FXML
-    private CheckBox allChkBox;
+    private RadioButton radioAll;
 
     @FXML
-    private CheckBox weekChkBox;
+    private ComboBox<String> apptMonthCbox;
 
     @FXML
-    private CheckBox monthChkBox;
-
-    @FXML
-    private Button addApptBtn;
-
-    @FXML
-    private Button addContactBtn;
-
-    @FXML
-    private Tab apptTab;
+    private ComboBox<String> apptWeekCbox;
 
     @FXML
     private TableView<Appt> apptTable;
@@ -105,13 +98,7 @@ public class mainWindow {
     @FXML
     private TableColumn<Customer, String> customerCountryCol;
 
-    @FXML
-    private Button deleteApptBtn;
-
-    @FXML
-    private Button deleteContactBtn;
-
-    @FXML
+   @FXML
     private TableColumn<?, ?> reportApptIdCol;
 
     @FXML
@@ -267,23 +254,65 @@ public class mainWindow {
     }
 
     @FXML
-    void chkBoxToggle(ActionEvent event) throws IOException {
-        CheckBox chkbox = (CheckBox) event.getSource();
-        if(chkbox.isSelected()) {
-            switch(chkbox.getText()) {
-                case "ALL":
-                    monthChkBox.setSelected(false);
-                    weekChkBox.setSelected(false);
-                    break;
-                case "Month":
-                    allChkBox.setSelected(false);
-                    weekChkBox.setSelected(false);
-                    break;
-                case "Week":
-                    monthChkBox.setSelected(false);
-                    allChkBox.setSelected(false);
-                    break;
+    void filterShowAll() {
+        System.out.println("All selected");
+        apptTable.setItems(DataStore.getAllAppointments());
+        apptMonthCbox.setDisable(true);
+        apptWeekCbox.setDisable(true);
+    }
+
+    @FXML
+    void filterByMonth() {
+        System.out.println("Month selected");
+        apptMonthCbox.setDisable(false);
+        apptWeekCbox.setDisable(true);
+        apptMonthCbox.fireEvent(new ActionEvent());
+
+    }
+
+    @FXML
+    void filterMonthSelected(){
+        try {
+            Integer month = apptMonthCbox.getSelectionModel().getSelectedIndex()+1;
+            ObservableList<Appt> searchResult = FXCollections.observableArrayList();
+            for(Appt appt : DataStore.getAllAppointments()){
+                if(appt.getStartDateTime().getMonthValue() == month || appt.getEndDateTime().getMonthValue() == month){
+                    searchResult.add(appt);
+                }
             }
+            apptTable.setItems(searchResult);
+        } catch (Exception e) {
+
+        }
+    }
+
+    @FXML
+    void filterByWeek() {
+        System.out.println("Week selected");
+        apptMonthCbox.setDisable(true);
+        apptWeekCbox.setDisable(false);
+        apptWeekCbox.fireEvent(new ActionEvent());
+    }
+
+    @FXML
+    void filterWeekSelected(){
+        try {
+            Integer week = apptWeekCbox.getSelectionModel().getSelectedIndex();
+            ObservableList<Appt> searchResult = FXCollections.observableArrayList();
+
+            for(Appt appt : DataStore.getAllAppointments()){
+                LocalDateTime apptStartDate = appt.getStartDateTime().toLocalDateTime();
+                LocalDateTime apptEndDate = appt.getEndDateTime().toLocalDateTime();
+                LocalDateTime weekStartDate = DataStore.getAllWeeks().get(week).getStartDate();
+                LocalDateTime weekEndDate = DataStore.getAllWeeks().get(week).getEndDate();
+                if(apptStartDate.isAfter(weekStartDate) && apptEndDate.isBefore(weekEndDate)){
+                    searchResult.add(appt);
+                }
+            }
+            apptTable.setItems(searchResult);
+        } catch (Exception e) {
+
+
         }
     }
 
@@ -352,6 +381,37 @@ public class mainWindow {
 
         }
 
+        LocalDate myDate = LocalDate.now(ZoneId.systemDefault());
+        Integer myYear = myDate.getYear();
+        myDate = LocalDate.of(myYear, 1, 1);
+        while(!(myDate.getDayOfWeek() == DayOfWeek.SUNDAY)){
+            myDate = myDate.minusDays(1);
+        }
+        LocalDate myDate2 = LocalDate.of(myYear, 12, 31);
+        while(!(myDate2.getDayOfWeek() == DayOfWeek.SATURDAY)){
+            myDate = myDate.plusDays(1);
+        }
+
+        int i = 1;
+        while (!myDate.isAfter(myDate2)){
+            LocalDate startDate = myDate;
+            LocalDate endDate = myDate.plusWeeks(1).minusDays(1);
+            DataStore.weekStringList.add(startDate.format(DateTimeFormatter.ofPattern("MM/dd/yyy"))+" to "+endDate.format(DateTimeFormatter.ofPattern("MM/dd/yyy")));
+            LocalDateTime startDT = LocalDateTime.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth(), 0, 0);
+            LocalDateTime endDT = LocalDateTime.of(endDate.getYear(), endDate.getMonth(), endDate.getDayOfMonth(), 23, 59);
+            DataStore.addWeekToList(new Week(startDT, endDT));
+            myDate = myDate.plusWeeks(1);
+            i++;
+        }
+
+
+        radioAll.setSelected(true);
+        radioAll.fireEvent(new ActionEvent());
+
+        apptWeekCbox.setItems(DataStore.weekStringList);
+
+
+        apptMonthCbox.setItems(DataStore.months);
 
 
 

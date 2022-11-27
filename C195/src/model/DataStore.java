@@ -22,11 +22,13 @@ public class DataStore {
     public static final ObservableList<String> countries = FXCollections.observableArrayList("U.S" , "UK", "Canada");
     public static final HashMap<String, Integer> divisionIdHash = new HashMap<>();
     public static final ObservableList<String> appointmentType = FXCollections.observableArrayList();
+    public static final ObservableList<String> months = FXCollections.observableArrayList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+    public static final ObservableList<String> weekStringList = FXCollections.observableArrayList();
+    private static final ObservableList<Week> weeksObjList = FXCollections.observableArrayList();
 
+    public static void addWeekToList(Week week){ weeksObjList.add(week); }
 
-    public static void addCustomer (Customer customer){
-        customers.add(customer);
-    }
+    public static void addCustomer (Customer customer){ customers.add(customer); }
 
     public static void addAppt (Appt appointment){
         appointments.add(appointment);
@@ -99,6 +101,9 @@ public class DataStore {
     }
 
     public static ObservableList<Contact> getAllContacts() {return contacts; }
+
+    public static ObservableList<Week> getAllWeeks() {return weeksObjList; }
+
 
     public static void buildDivisonIdHash() throws SQLException {
         ResultSet rs = JDBC.runStatement("SELECT Division, Division_ID FROM first_level_divisions");

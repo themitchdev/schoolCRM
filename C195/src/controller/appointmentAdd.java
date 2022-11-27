@@ -88,7 +88,6 @@ public class appointmentAdd {
 
     @FXML
     void saveAddAppt(ActionEvent event) throws SQLException {
-        boolean isOverlap = false;
         Integer apptID = 0;
         String title = null;
         String description = null;

@@ -81,8 +81,6 @@ public class appointmentUpdate {
 
     @FXML
     void saveUpdateAppt(ActionEvent event) throws Exception {
-        boolean isOverlap = false;
-
         String title = null;
         String description = null;
         String location = null;
