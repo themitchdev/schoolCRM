@@ -10,6 +10,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.util.function.Predicate;
 
 public class MyTime {
     private static final LocalDate date = LocalDate.now();
@@ -56,30 +57,39 @@ public class MyTime {
         return time.format(DateTimeFormatter.ofPattern("a"));
     }
 
-    public static boolean isThereAppt15InMins(LocalTime now, LocalTime apptStartTime){
-        long timeDiff = ChronoUnit.MINUTES.between(apptStartTime, now);
-        if (timeDiff <= 15) return true;
-        return false;
-    }
+//    public static boolean isThereApptIn15Mins(LocalTime now, LocalTime apptStartTime){
+//        long timeDiff = ChronoUnit.MINUTES.between(apptStartTime, now);
+//        if (timeDiff <= 15) return true;
+//        return false;
+//    }
 
-    public static boolean isApptOverlap(Appt newAppt){
-        ZonedDateTime newStartDateTime = ZonedDateTime.of(newAppt.getStartDate(), newAppt.getStartTime(), ZoneId.systemDefault());
-        ZonedDateTime newEndDateTime = ZonedDateTime.of(newAppt.getEndDate(), newAppt.getEndTime(), ZoneId.systemDefault());
+    public static Predicate<Appt> isApptOverlap = newAppt-> {
+        ZonedDateTime tempStartDateTime = ZonedDateTime.of(newAppt.getStartDate(), newAppt.getStartTime(), ZoneId.systemDefault());
+        ZonedDateTime tempEndDateTime = ZonedDateTime.of(newAppt.getEndDate(), newAppt.getEndTime(), ZoneId.systemDefault());
+        ZonedDateTime newStartDateTime = fromUserTimetoUTC(tempStartDateTime);
+        ZonedDateTime newEndDateTime = fromUserTimetoUTC(tempEndDateTime);
+        System.out.println(newStartDateTime);
+        System.out.println(newEndDateTime);
 
-        ObservableList<Appt> tempApptList = DataStore.getAllAppointments();
-        for(Appt appt : tempApptList){
+        for(Appt appt : DataStore.getAllAppointments()){
+            System.out.println(appt.getStartDateTime());
+            System.out.println(appt.getEndDateTime());
+            if(!(appt.getId() == newAppt.getId())){
             if((newStartDateTime.isAfter(appt.getStartDateTime())
                     && newStartDateTime.isBefore(appt.getEndDateTime()))
                     || (newEndDateTime.isAfter(appt.getStartDateTime())
                     && newEndDateTime.isBefore(appt.getEndDateTime()))
                     || (newStartDateTime.isBefore(appt.getStartDateTime())
-                    && newEndDateTime.isAfter(appt.getEndDateTime()))){
+                    && newEndDateTime.isAfter(appt.getEndDateTime()))
+                    || (newStartDateTime.isEqual(appt.getStartDateTime())
+                    || newEndDateTime.isEqual(appt.getEndDateTime()))){
                 Misc.dialogAlertInfo("Appointment Time Overlap", "This appointment overlaps with Appointment ID #" + appt.getId());
                 return true;
             }
+            }
         }
         return false;
-    }
+    };
 
 
 

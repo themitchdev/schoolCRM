@@ -21,7 +21,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../view/mainWindow.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/loginForm.fxml"));
         if(Locale.getDefault().getLanguage().equals("fr")){
             ResourceBundle rb = ResourceBundle.getBundle("view/myApp", Locale.getDefault());
             primaryStage.setTitle(rb.getString("windowtitle"));
@@ -31,13 +31,8 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, primaryStage.getHeight(), primaryStage.getWidth()));
         primaryStage.show();
 
-        //Use localTime and localdate from object list, these have been converted to user's timezone
-        ObservableList<Appt> myApptList = DataStore.getAllAppointments();
-        for(Appt appt : myApptList){
-            if (Login.getLoggedInUserID() == appt.getUserId() && MyTime.isThereAppt15InMins(LocalTime.now(), appt.getStartTime())){
-                Misc.dialogAlertInfo("Appointment  Alert", "You have an appointment soon");
-            }
-        }
+
+
 
     }
 

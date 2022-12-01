@@ -92,35 +92,52 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <Pane prefHeight="698.0" prefWidth="110.0" styleClass="body" />
-                  <Pane layoutX="110.0" prefHeight="55.0" prefWidth="971.0" styleClass="anchorPane" />
-                  <Label layoutX="622.0" layoutY="79.0" prefHeight="27.0" prefWidth="250.0" text="Total Customer Appointments:" textFill="#395135">
+                  <Pane layoutX="110.0" prefHeight="28.0" prefWidth="1392.0" styleClass="anchorPane" />
+                  <Label layoutX="1000.0" layoutY="55.0" prefHeight="27.0" prefWidth="224.0" text="Total Appointments:" textFill="#395135">
                      <font>
-                        <Font name="System Bold" size="13.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="118.0" layoutY="83.0" prefHeight="17.0" prefWidth="143.0" text="Use the following filters:" textFill="#395135" />
-                  <ComboBox layoutX="261.0" layoutY="79.0" prefWidth="150.0" promptText="Type" />
-                  <ComboBox layoutX="445.0" layoutY="79.0" prefWidth="150.0" promptText="Month" />
-                  <Line endX="869.0" layoutX="211.0" layoutY="127.0" startX="-100.0" stroke="#395135" />
-                  <Label layoutX="118.0" layoutY="158.0" text="Schedule for contact. Please select a contact." />
-                  <ComboBox layoutX="370.0" layoutY="154.0" prefWidth="150.0" />
-                  <Line endX="869.0" layoutX="210.0" layoutY="425.0" startX="-100.0" stroke="#395135" />
-                  <Label layoutX="820.0" layoutY="79.0" text="13" textFill="#395135">
+                  <Label layoutX="299.0" layoutY="42.0" prefHeight="52.0" prefWidth="114.0" text="Select the filters you wish to use::" textFill="#395135" wrapText="true">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font size="14.0" />
+                     </font></Label>
+                  <ComboBox fx:id="reportTypeCbox" layoutX="452.0" layoutY="55.0" prefHeight="25.0" prefWidth="165.0" promptText="Type of Appointment" />
+                  <ComboBox fx:id="reportMonthCbox" layoutX="641.0" layoutY="54.0" prefHeight="25.0" prefWidth="165.0" promptText="Month of Appointment" />
+                  <Line endX="1289.0" layoutX="211.0" layoutY="127.0" startX="-100.0" stroke="#395135" strokeWidth="10.0" />
+                  <Label layoutX="118.0" layoutY="160.0" text="Schedule for contact. Please select a contact." />
+                  <ComboBox fx:id="reportContactCbox" layoutX="370.0" layoutY="156.0" onAction="#reportContactwithAppts" prefWidth="150.0" />
+                  <Line endX="1290.0" layoutX="210.0" layoutY="420.0" startX="-100.0" stroke="#395135" strokeWidth="10.0" />
+                  <Label fx:id="totalApptLabel" layoutX="1255.0" layoutY="50.0" text="0" textFill="#395135">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="scheduleTable" layoutX="109.0" layoutY="197.0" prefHeight="196.0" prefWidth="971.0">
+                  <TableView fx:id="scheduleTable" layoutX="117.0" layoutY="196.0" prefHeight="196.0" prefWidth="1392.0">
                      <columns>
-                        <TableColumn fx:id="reportCustIdCol" prefWidth="75.0" text="Customer ID" />
-                        <TableColumn fx:id="reportApptIdCol" prefWidth="100.0" text="Appointment Id" />
-                        <TableColumn fx:id="reportTitleCol" prefWidth="160.0" text="Title" />
-                        <TableColumn fx:id="reportTypeCol" prefWidth="109.0" text="Type" />
-                        <TableColumn fx:id="reportDescripCol" prefWidth="267.0" text="Description" />
-                        <TableColumn fx:id="reportStartTimeCol" prefWidth="138.0" text="Start Date/Time" />
-                        <TableColumn fx:id="reportEndTimeCol" prefWidth="121.0" text="End Date/Time" />
+                        <TableColumn fx:id="reportCustIdCol" prefWidth="95.0" text="Customer ID" />
+                        <TableColumn fx:id="reportApptIdCol" prefWidth="134.0" text="Appointment Id" />
+                        <TableColumn fx:id="reportTitleCol" prefWidth="184.66668701171875" text="Title" />
+                        <TableColumn fx:id="reportTypeCol" prefWidth="213.66665649414062" text="Type" />
+                        <TableColumn fx:id="reportDescripCol" prefWidth="350.6666259765625" text="Description" />
+                        <TableColumn fx:id="reportStartTimeCol" prefWidth="188.99993896484375" text="Start Date/Time" />
+                        <TableColumn fx:id="reportEndTimeCol" prefWidth="213.33331298828125" text="End Date/Time" />
                      </columns>
                   </TableView>
+                  <Button fx:id="filterButton" layoutX="858.0" layoutY="58.0" mnemonicParsing="false" onAction="#reportFilter" prefHeight="25.0" prefWidth="81.0" text="Search" />
+                  <Button layoutX="509.0" layoutY="84.0" mnemonicParsing="false" onAction="#clearTypeCbox" text="Clear" />
+                  <Button layoutX="703.0" layoutY="83.0" mnemonicParsing="false" onAction="#clearMonthCbox" text="Clear" />
+                  <TableView fx:id="reportNumCustByCountry" layoutX="496.0" layoutY="448.0" prefHeight="231.0" prefWidth="446.0">
+                    <columns>
+                      <TableColumn fx:id="reportCountryCol" prefWidth="259.66668701171875" text="Country" />
+                      <TableColumn fx:id="reportNumCustCol" prefWidth="185.0" text="Number of Customers" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="202.0" layoutY="518.0" prefHeight="72.0" prefWidth="205.0" text="Total customers in each country:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                </children></AnchorPane>
         </content>
       </Tab>

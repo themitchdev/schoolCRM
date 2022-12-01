@@ -103,54 +103,54 @@ public class appointmentAdd {
         ZonedDateTime startDateTime = null;
         ZonedDateTime endDateTime = null;
 
-        boolean isTrue= true;
-        while (isTrue) {
-            try {
-                title = apptTitle.getText();
-                description = apptDescription.getText();
-                location = apptLocation.getText();
-                contact = contactComboBox.getValue();
-                type = typeCbox.getValue();
-                custId = Integer.parseInt(apptCustId.getText());
-                userId = Login.getLoggedInUserID();
-                startDate = apptStartDate.getValue();
-                startTime = LocalTime.of(Integer.parseInt(startHourCbox.getValue()), Integer.parseInt(startMinCbox.getValue()));
-                endDate = apptEndDate.getValue();
-                endTime = LocalTime.of(Integer.parseInt(endHourCbox.getValue()), Integer.parseInt(endMinCbox.getValue()));
-                startDateTime = MyTime.fromUserTimetoUTC(ZonedDateTime.of(startDate, startTime, ZoneId.systemDefault()));
-                endDateTime = MyTime.fromUserTimetoUTC(ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault()));
+        try {
+            title = apptTitle.getText();
+            description = apptDescription.getText();
+            location = apptLocation.getText();
+            contact = contactComboBox.getValue();
+            type = typeCbox.getValue();
+            custId = Integer.parseInt(apptCustId.getText());
+            userId = Login.getLoggedInUserID();
+            startDate = apptStartDate.getValue();
+            startTime = LocalTime.of(Integer.parseInt(startHourCbox.getValue()),
+                                     Integer.parseInt(startMinCbox.getValue()));
+            endDate = apptEndDate.getValue();
+            endTime = LocalTime.of(Integer.parseInt(endHourCbox.getValue()), Integer.parseInt(endMinCbox.getValue()));
+            startDateTime = MyTime.fromUserTimetoUTC(ZonedDateTime.of(startDate, startTime, ZoneId.systemDefault()));
+            endDateTime = MyTime.fromUserTimetoUTC(ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault()));
 
 
-        Appt appt = new Appt(apptID,
-                             title,
-                             description,
-                             location,
-                             contact,
-                             custId,
-                             startDateTime,
-                             endDateTime,
-                             startDate,
-                             startTime,
-                             endDate,
-                             endTime,
-                             type,
-                             userId);
+            Appt appt = new Appt(apptID,
+                                 title,
+                                 description,
+                                 location,
+                                 contact,
+                                 custId,
+                                 startDateTime,
+                                 endDateTime,
+                                 startDate,
+                                 startTime,
+                                 endDate,
+                                 endTime,
+                                 type,
+                                 userId);
 
-        //System.out.println("New appt time is: " + appt.getStartDateTime());
-        if (!MyTime.isApptOverlap(appt)) {
-            JDBC.saveAppt(appt);
-            DataStore.addAppt(appt);
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.close();
-            break;
-        }
-            } catch (Exception e) {
-                Misc.dialogAlertInfo("Input Error", "Invalid input or blank input in form");
-                isTrue = false;
+            if (!MyTime.isApptOverlap.test(appt)) {
+                JDBC.saveAppt(appt);
+                DataStore.addAppt(appt);
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
+
             }
+
+        } catch (Exception e) {
+            Misc.dialogAlertInfo("Input Error", "Invalid input or blank input in form");
+
         }
     }
+
 
     public void initialize() throws SQLException {
         startHourCbox.setItems(MyTime.hours);

@@ -95,8 +95,7 @@ public class appointmentUpdate {
         ZonedDateTime startDateTime = null;
         ZonedDateTime endDateTime = null;
 
-        boolean isTrue= true;
-        while (isTrue) {
+
             try {
                 Integer apptID = apptFromMainForm.getId();
                 title = apptTitle.getText();
@@ -130,7 +129,7 @@ public class appointmentUpdate {
                                      userId);
 
                 //System.out.println("New appt time is: " + appt.getStartDateTime());
-                if (!MyTime.isApptOverlap(appt)) {
+                if (!MyTime.isApptOverlap.test(appt)) {
                     JDBC.updateApptSQL(appt);
 
 
@@ -139,13 +138,12 @@ public class appointmentUpdate {
 
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     stage.close();
-                    break;
+
                 }
             } catch (Exception e) {
                 Misc.dialogAlertInfo("Input Error", "Invalid input or blank input in form");
                 System.out.println(e);
-                isTrue = false;
-            }
+
         }
 
     }

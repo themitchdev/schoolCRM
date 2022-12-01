@@ -1,13 +1,11 @@
 package controller;
 
 import Utilities.JDBC;
-import Utilities.Login;
 import Utilities.Misc;
 import Utilities.MyTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,22 +13,42 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.*;
-
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class mainWindow {
+
+    @FXML
+    private TableView<CustomerPerCountry> reportNumCustByCountry;
+
+    @FXML
+    private TableColumn<CustomerPerCountry, String> reportCountryCol;
+
+    @FXML
+    private TableColumn<CustomerPerCountry, Integer> reportNumCustCol;
+
+    @FXML
+    private Label totalApptLabel;
+
+    @FXML
+    private ComboBox<String> reportContactCbox;
+
+    @FXML
+    private ComboBox<String> reportTypeCbox;
+
+    @FXML
+    private ComboBox<String> reportMonthCbox;
 
     @FXML
     private RadioButton radioAll;
@@ -99,37 +117,28 @@ public class mainWindow {
     private TableColumn<Customer, String> customerCountryCol;
 
    @FXML
-    private TableColumn<?, ?> reportApptIdCol;
+    private TableColumn<Appt, Integer> reportApptIdCol;
 
     @FXML
-    private TableColumn<?, ?> reportCustIdCol;
+    private TableColumn<Appt, String> reportCustIdCol;
 
     @FXML
-    private TableColumn<?, ?> reportDescripCol;
+    private TableColumn<Appt, String> reportDescripCol;
 
     @FXML
-    private TableColumn<?, ?> reportEndTimeCol;
+    private TableColumn<Appt, Timestamp> reportEndTimeCol;
 
     @FXML
-    private TableColumn<?, ?> reportStartTimeCol;
+    private TableColumn<Appt, Timestamp> reportStartTimeCol;
 
     @FXML
-    private TableColumn<?, ?> reportTitleCol;
+    private TableColumn<Appt, String> reportTitleCol;
 
     @FXML
-    private TableColumn<?, ?> reportTypeCol;
+    private TableColumn<Appt, String> reportTypeCol;
 
     @FXML
-    private TableView<?> scheduleTable;
-
-    @FXML
-    private Button updateApptBtn;
-
-    @FXML
-    private Button updateContactBtn;
-
-
-
+    private TableView<Appt> scheduleTable;
 
     @FXML
     public void addContact(ActionEvent event) throws IOException {
@@ -149,6 +158,70 @@ public class mainWindow {
 
 
 
+    @FXML
+    public void reportFilter(){
+        try {
+            Integer month = reportMonthCbox.getSelectionModel().getSelectedIndex()+1;
+            Integer count = 0;
+            ObservableList<Appt> searchByMonth = FXCollections.observableArrayList();
+            ObservableList<Appt> searchByType = FXCollections.observableArrayList();
+            if(reportMonthCbox.getValue() == null){
+                for(Appt appt : DataStore.getAllAppointments()){
+                    if(appt.getType().contains(reportTypeCbox.getValue())){
+                        count++;
+                        searchByType.add(appt);
+                    }
+                }
+            } else if(reportTypeCbox.getValue() == null) {
+                for (Appt appt : DataStore.getAllAppointments()) {
+                    if (appt.getStartDateTime().getMonthValue() == month || appt.getEndDateTime().getMonthValue() == month) {
+                        count++;
+                        searchByMonth.add(appt);
+                    }
+                }
+            }else{
+                for (Appt appt : DataStore.getAllAppointments()) {
+                    if (appt.getStartDateTime().getMonthValue() == month || appt.getEndDateTime().getMonthValue() == month)
+                        searchByMonth.add(appt);
+                }
+                for (Appt appt : searchByMonth){
+                    if(appt.getType().contains(reportTypeCbox.getValue()))
+                        count++;
+                }
+            }
+            totalApptLabel.setText(String.valueOf(count));
+        } catch (Exception e) {
+            Misc.dialogAlertInfo("Report Filter", "You must select at least 1 filter before clicking the Search button");
+        }
+    }
+
+    @FXML
+    public void clearTypeCbox(){
+        reportTypeCbox.setValue(null);
+    }
+
+    @FXML
+    public void clearMonthCbox(){
+        reportMonthCbox.setValue(null);
+    }
+
+    @FXML
+    public void reportContactwithAppts(){
+        ObservableList<Appt> searchResult = FXCollections.observableArrayList();
+        for (Appt appt : DataStore.getAllAppointments()){
+            if(appt.getContact().contains(reportContactCbox.getValue()))
+                searchResult.add(appt);
+        }
+        scheduleTable.setItems(searchResult);
+        reportCustIdCol.setCellValueFactory(new PropertyValueFactory<>("custId"));
+        reportApptIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        reportTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        reportTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        reportDescripCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        reportStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("formattedStartDateTime"));
+        reportEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("formattedEndDateTime"));
+
+    }
 
     @FXML
     public void updateContact(ActionEvent event) throws IOException {
@@ -281,9 +354,7 @@ public class mainWindow {
                 }
             }
             apptTable.setItems(searchResult);
-        } catch (Exception e) {
-
-        }
+        } catch (Exception e) {}
     }
 
     @FXML
@@ -318,9 +389,6 @@ public class mainWindow {
 
     @FXML
     public void initialize() throws SQLException, ParseException {
-        //This is for testing only. this userId must be deleted before running final program
-        Login.setLoggedInUserId(1);
-
         ResultSet customerResultSet = JDBC.runStatement("SELECT * FROM customers");
         while (customerResultSet.next()) {
             DataStore.addCustomer(new Customer(customerResultSet.getInt("Customer_ID"),
@@ -404,17 +472,52 @@ public class mainWindow {
             i++;
         }
 
-
         radioAll.setSelected(true);
         radioAll.fireEvent(new ActionEvent());
 
         apptWeekCbox.setItems(DataStore.weekStringList);
-
-
         apptMonthCbox.setItems(DataStore.months);
+        Misc.buildContactNameList();
+        reportContactCbox.setItems(DataStore.contactNames);
+        reportMonthCbox.setItems(DataStore.months);
 
+        Misc.buildApptTypeList();
 
+        reportTypeCbox.setItems(DataStore.appointmentType);
 
+        ObservableList<CustomerPerCountry> countPerCountry = FXCollections.observableArrayList();
+        for(String country : DataStore.countries){
+            countPerCountry.add(new CustomerPerCountry(country, 0));
+        }
+        for (Customer customer : DataStore.getAllCustomers()){
+            System.out.println(customer.getCountry());
+            switch (customer.getCountry()){
+                case "U.S":
+                    countPerCountry.get(0).setCustomerCounter(countPerCountry.get(0).getCustomerCounter()+1);
+                    break;
+                case "UK":
+                    countPerCountry.get(1).setCustomerCounter(countPerCountry.get(1).getCustomerCounter()+1);
+                    break;
+                case "Canada":
+                    countPerCountry.get(2).setCustomerCounter(countPerCountry.get(2).getCustomerCounter()+1);
+                    break;
+
+            }
+        }
+
+        reportNumCustByCountry.setItems(countPerCountry);
+        reportCountryCol.setCellValueFactory(new PropertyValueFactory<>("country"));
+        reportNumCustCol.setCellValueFactory(new PropertyValueFactory<>("customerCounter"));
+
+        Appt appt = DataStore.getAllAppointments().stream()
+                .filter( a -> ChronoUnit.MINUTES.between(a.getStartTime(), LocalTime.now()) <= 15)
+                .findFirst().orElse(null);
+
+        if(!(appt == null)){
+            Misc.dialogAlertInfo("Appointment  Alert", "You have an appointment with " + "Appointment ID" + appt.getId() + " Starting on: " + appt.getStartDate() + " at " + appt.getStartTime());
+        }else{
+            Misc.dialogAlertInfo("Appointment Alert", "There are no upcoming appointments");
+        }
 
 
     }
