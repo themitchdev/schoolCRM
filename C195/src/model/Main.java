@@ -45,8 +45,8 @@ public class Main extends Application {
         Utilities.JDBC.insert1stLvlDivIntoList(DataStore.caProvinces, "3");
         DataStore.buildDivisonIdHash();
 
-        Integer time = 8;
-        while(time < 22){
+        Integer time =  MyTime.userSysTimeOpen.getHour();
+        while(time < MyTime.userSysTimeClose.getHour()){
             MyTime.hours.add(String.format("%02d", time));
             time++;
         }

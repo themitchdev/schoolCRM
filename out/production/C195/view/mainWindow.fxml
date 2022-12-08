@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<TabPane fx:id="mainTabs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1500.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.mainWindow">
+<TabPane fx:id="mainTabs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1500.0" stylesheets="@style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindow">
   <tabs>
     <Tab fx:id="customerTab" styleClass="tab:focused" text="Customers">
       <content>
@@ -24,7 +24,7 @@
                      <children>
                         <Button fx:id="addContactBtn" layoutX="24.0" layoutY="117.0" mnemonicParsing="false" onAction="#addContact" prefHeight="25.0" prefWidth="63.0" text="ADD" />
                         <Button fx:id="updateContactBtn" layoutX="24.0" layoutY="183.0" mnemonicParsing="false" onAction="#updateContact" prefHeight="25.0" prefWidth="63.0" text="UPDATE" />
-                        <Button fx:id="deleteContactBtn" layoutX="24.0" layoutY="249.0" mnemonicParsing="false" onAction="#deleteContact" prefHeight="25.0" prefWidth="63.0" text="DELETE" />
+                        <Button fx:id="deleteContactBtn" layoutX="24.0" layoutY="249.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="25.0" prefWidth="63.0" text="DELETE" />
                      </children>
                   </Pane>
                   <Pane layoutX="110.0" prefHeight="55.0" prefWidth="1392.0" styleClass="anchorPane" />
@@ -106,7 +106,7 @@
                   <ComboBox fx:id="reportMonthCbox" layoutX="641.0" layoutY="54.0" prefHeight="25.0" prefWidth="165.0" promptText="Month of Appointment" />
                   <Line endX="1289.0" layoutX="211.0" layoutY="127.0" startX="-100.0" stroke="#395135" strokeWidth="10.0" />
                   <Label layoutX="118.0" layoutY="160.0" text="Schedule for contact. Please select a contact." />
-                  <ComboBox fx:id="reportContactCbox" layoutX="370.0" layoutY="156.0" onAction="#reportContactwithAppts" prefWidth="150.0" />
+                  <ComboBox fx:id="reportContactCbox" layoutX="370.0" layoutY="156.0" onAction="#reportContactWithAppts" prefWidth="150.0" />
                   <Line endX="1290.0" layoutX="210.0" layoutY="420.0" startX="-100.0" stroke="#395135" strokeWidth="10.0" />
                   <Label fx:id="totalApptLabel" layoutX="1255.0" layoutY="50.0" text="0" textFill="#395135">
                      <font>
@@ -127,7 +127,7 @@
                   <Button fx:id="filterButton" layoutX="858.0" layoutY="58.0" mnemonicParsing="false" onAction="#reportFilter" prefHeight="25.0" prefWidth="81.0" text="Search" />
                   <Button layoutX="509.0" layoutY="84.0" mnemonicParsing="false" onAction="#clearTypeCbox" text="Clear" />
                   <Button layoutX="703.0" layoutY="83.0" mnemonicParsing="false" onAction="#clearMonthCbox" text="Clear" />
-                  <TableView fx:id="reportNumCustByCountry" layoutX="496.0" layoutY="448.0" prefHeight="231.0" prefWidth="446.0">
+                  <TableView fx:id="reportNumCustByCountry" layoutX="496.0" layoutY="448.0" prefHeight="231.0" prefWidth="486.0">
                     <columns>
                       <TableColumn fx:id="reportCountryCol" prefWidth="259.66668701171875" text="Country" />
                       <TableColumn fx:id="reportNumCustCol" prefWidth="185.0" text="Number of Customers" />

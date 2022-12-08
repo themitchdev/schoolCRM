@@ -7,12 +7,12 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-
+/** Represents where most data for this application is stored
+ */
 public class DataStore {
 
     private static final ObservableList<Customer> customers = FXCollections.observableArrayList();
-    private static final ObservableList<Appt> appointments = FXCollections.observableArrayList();
-    private static final ObservableList<Schedule> schedules = FXCollections.observableArrayList();
+    private static final ObservableList<Appointment> appointments = FXCollections.observableArrayList();
     private static final ObservableList<Contact> contacts = FXCollections.observableArrayList();
     public static final ObservableList<String> contactNames = FXCollections.observableArrayList();
     public static final ObservableList<String> customerNames = FXCollections.observableArrayList();
@@ -26,36 +26,66 @@ public class DataStore {
     public static final ObservableList<String> weekStringList = FXCollections.observableArrayList();
     private static final ObservableList<Week> weeksObjList = FXCollections.observableArrayList();
 
+    /**Adds Week object to list of weeks
+     * @param week a Week object that represents a week
+     */
     public static void addWeekToList(Week week){ weeksObjList.add(week); }
 
+    /**Adds Customer object to list of customers
+     * @param customer a Customer object that represents a customer
+     */
     public static void addCustomer (Customer customer){ customers.add(customer); }
 
-    public static void addAppt (Appt appointment){
+    /**Adds Appt object to list of appointments
+     * @param appointment an Appt object that represents an appointment
+     */
+    public static void addAppt (Appointment appointment){
         appointments.add(appointment);
     }
 
-    public static void addSchedule (Schedule schedule){
-        schedules.add(schedule);
-    }
-
+    /**Adds Contact object to list of contacts
+     * @param contact a Contact object that represents a contact
+     */
     public static void addContact(Contact contact){ contacts.add(contact); }
 
+    /**Replaces a Customer object in the list of customer
+     * @param index an integer that represents the index of the customer to be updated with new customer
+     * @param customer a Customer object that represent the customer to be updated with new customer
+     */
     public static void updateCustomer (int index, Customer customer){ customers.set(index, customer); }
 
-    public static void updateAppt (int index, Appt appointment){
+    /**Replaces an Appt object in the list of appointments
+     * @param index an integer that represents the index of the appointment to be updated with new appointment
+     * @param appointment an Appt object that represent the appointment to be updated
+     * */
+    public static void updateAppt (int index, Appointment appointment){
         appointments.set(index, appointment);
     }
 
+    /**Replaces a Contact object in the list of contacts
+     * @param index an integer that represents the index of the contact to be updated with new contact
+     * @param contact a Contact object that represents the contact to be updated
+     */
     public static void updateContact (int index, Contact contact){ contacts.set(index, contact); }
 
+    /**Deletes a Customer object from the list of customers
+     * @param obj a Customer object that represents the customer to be deleted
+     */
     public static boolean deleteCustomer (Customer obj){
         return customers.remove(obj);
      }
 
-    public static boolean deleteAppt (Appt obj){
+    /**Deletes an Appt object from the list of appointments
+     * @param obj an Appt object that represents the appointment to be deleted
+     */
+    public static boolean deleteAppt (Appointment obj){
         return appointments.remove(obj);
     }
 
+    /** Finds the contact id of the contact name.
+     * @param contactName a string that represents the contact name to be searched
+     * @return an integer representing contact's id
+     */
     public static Integer getContactIdfromName(String contactName){
         ObservableList<Contact> contacts = getAllContacts();
         Integer contactID = null;
@@ -67,10 +97,14 @@ public class DataStore {
         return contactID;
     }
 
-    public static Appt searchApptById(Integer apptId){
-        ObservableList<Appt> allAppts = getAllAppointments();
-        Appt foundAppt = null;
-        for(Appt appt : allAppts){
+    /** Finds the appointment object associated to an appointment id
+     * @param apptId an integer that represents the the appointment id to be searched
+     * @return an Appt object representing the appointment found
+     */
+    public static Appointment searchApptById(Integer apptId){
+        ObservableList<Appointment> allAppts = getAllAppointments();
+        Appointment foundAppt = null;
+        for(Appointment appt : allAppts){
             if(appt.getId() == apptId){
                 foundAppt = appt;
             }
@@ -78,33 +112,33 @@ public class DataStore {
         return foundAppt;
     }
 
-    public static ObservableList<Schedule> lookupScheduleByContactId(int contactId){
-        ObservableList<Schedule> schedulesFound = FXCollections.observableArrayList();
-        for (Schedule schedule : schedules) {
-            if (schedule.getId() == contactId) {
-                schedulesFound.add(schedule);
-            }
-        }
-        return schedulesFound;
-    }
-
+    /**Gets all customers
+     * @return an ObservableList with all customers
+     */
     public static ObservableList<Customer> getAllCustomers(){
         return customers;
     }
 
-    public static ObservableList<Appt> getAllAppointments(){
+    /**Gets all appointments
+     * @return an ObservableList with all appointments
+     */
+    public static ObservableList<Appointment> getAllAppointments(){
         return appointments;
     }
 
-    public static ObservableList<Schedule> getAllSchedules(){
-        return schedules;
-    }
 
+    /**Gets all contacts
+     * @return an ObservableList with all contacts
+     */
     public static ObservableList<Contact> getAllContacts() {return contacts; }
 
+    /**Gets all weeks of the year
+     * @return an ObservableList with all weeks for the year
+     */
     public static ObservableList<Week> getAllWeeks() {return weeksObjList; }
 
-
+    /**Builds a hashmap with division name as key and division id as value.
+     */
     public static void buildDivisonIdHash() throws SQLException {
         ResultSet rs = JDBC.runStatement("SELECT Division, Division_ID FROM first_level_divisions");
         while(rs.next()){

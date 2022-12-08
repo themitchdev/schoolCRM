@@ -1,7 +1,7 @@
 package Utilities;
 
 import javafx.collections.ObservableList;
-import model.Appt;
+import model.Appointment;
 import model.Customer;
 import model.DataStore;
 
@@ -9,6 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**Represents the database connection and other database utilities
+ */
 public abstract class JDBC {
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
@@ -20,6 +22,8 @@ public abstract class JDBC {
     private static final String password = "Passw0rd!"; // Password
     public static Connection connection;  // Connection Interface
 
+    /** Connects the application to the database
+     */
     public static void openConnection()
     {
         try {
@@ -33,6 +37,8 @@ public abstract class JDBC {
         }
     }
 
+    /** Closes the connection to the database
+    */
     public static void closeConnection() {
         try {
             connection.close();
@@ -44,6 +50,10 @@ public abstract class JDBC {
         }
     }
 
+    /** Gets the State name of the customer id
+     * @param custId an integer containing the customer's id
+     * @return a string representing customer's State
+     */
     public static String customerGetState(int custId) throws SQLException {
         String sql = "SELECT Division FROM customers, first_level_divisions WHERE customers.Division_ID=first_level_divisions.Division_ID AND Customer_ID =?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -54,6 +64,10 @@ public abstract class JDBC {
         return rs.getString("Division");
     }
 
+    /** Gets the Country name of the customer id
+     * @param custId an integer containing the customer's id
+     * @return a string representing customer's Country
+     */
     public static String customerGetCountry(int custId) throws SQLException {
         String sql = "SELECT Country FROM customers, first_level_divisions, countries WHERE customers.Division_ID=first_level_divisions.Division_ID AND first_level_divisions.Country_ID = countries.Country_ID AND Customer_ID =?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -63,6 +77,11 @@ public abstract class JDBC {
 
         return rs.getString("Country");
     }
+
+    /** Gets the name of the contact
+     * @param apptId an integer containing the appointment id
+     * @return a string representing contact name
+     */
     public static String apptGetContactName(int apptId) throws SQLException {
         String sql = "SELECT Contact_Name FROM appointments, contacts WHERE contacts.Contact_ID = appointments.Contact_ID AND Appointment_ID =?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -73,18 +92,30 @@ public abstract class JDBC {
         return rs.getString("Contact_Name");
     }
 
+    /** Runs a MySQL statement query
+     * @param sql a string containing the SQL statement
+     * @return a ResultSet representing the rows retrieved from the database
+     */
     public static ResultSet runStatement(String sql) throws SQLException {
         Statement stmt = JDBC.connection.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         return rs;
     }
 
+    /** Runs a MySQL query and inserts first level divisions/states/provinces into an ObservableList
+     * @param list an ObservableList where the first level divisions will be inserted
+     * @param countryID an integer that represents the country
+     */
     public static void insert1stLvlDivIntoList(ObservableList<String> list, String countryID) throws SQLException {
         ResultSet rs = JDBC.runStatement("SELECT Division FROM first_level_divisions WHERE Country_ID=" + countryID);
         while (rs.next()){
             list.add(rs.getString("Division"));
             }
         }
+
+    /** Saves a customer into the database
+     * @param customer a Customer obj that represents a customer
+     */
     public static void saveCustomer(Customer customer) throws SQLException {
         Integer division_ID = DataStore.divisionIdHash.get(customer.getState());
         String sql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Division_ID) " +
@@ -102,7 +133,10 @@ public abstract class JDBC {
 
         }
 
-    public static void saveAppt(Appt appt) throws SQLException {
+    /** Saves an appointment into the database
+     * @param appt an Appointment obj that represents an appointment
+     */
+    public static void saveAppt(Appointment appt) throws SQLException {
         String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) " +
                 "VALUES(?,?,?,?,?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -122,6 +156,9 @@ public abstract class JDBC {
 
     }
 
+    /** Updates an existing customer in the database
+     * @param customer a Customer obj that represents a customer
+     */
     public static void updateCustomerSQL(Customer customer) throws SQLException {
         Integer division_ID = DataStore.divisionIdHash.get(customer.getState());
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone= ?, Division_ID = ? WHERE Customer_ID = ?";
@@ -135,7 +172,10 @@ public abstract class JDBC {
         ps.execute();
     }
 
-    public static void updateApptSQL(Appt appt) throws SQLException {
+    /** Updates an existing appointment in the database
+     * @param appt an Appointment obj that represents an appointment
+     */
+    public static void updateApptSQL(Appointment appt) throws SQLException {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type= ?, Start = ?, End = ?, Customer_ID = ?, Contact_ID = ?  WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, appt.getTitle());
@@ -150,6 +190,9 @@ public abstract class JDBC {
         ps.execute();
     }
 
+    /** Deletes a customer from the database
+     * @param customer the Customer obj that will be deleted
+     */
     public static void deleteCustomerSQL(Customer customer) throws Exception {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -157,6 +200,9 @@ public abstract class JDBC {
         ps.execute();
     }
 
+    /** Deletes an appointment from the database
+     * @param appointmentId an integer representing the appointment id to be deleted
+     */
     public static void deleteAppointmentSQL(Integer appointmentId) throws Exception {
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -164,6 +210,10 @@ public abstract class JDBC {
         ps.execute();
     }
 
+    /** Gets customer's name using customer's id
+     * @param custId an integer representing the customer id
+     * @return a string that represents the customer's name
+     */
     public static String getCustNameFromCustId(Integer custId) throws SQLException {
         //check is there an appointment with customerid
         String sql = "SELECT Customer_Name FROM customers WHERE Customer_ID = ?";
@@ -174,6 +224,10 @@ public abstract class JDBC {
         return  rs.getString("Customer_Name");
     }
 
+    /** Checks if a customer id exists in the appointment table
+     * @param custId an integer representing the customer id
+     * @return a boolean that represents whether customer id is in appointment table or not
+     */
     public static boolean isCustIdInApptTbl(Integer custId) throws SQLException {
         String sql = "SELECT Customer_ID FROM appointments WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -185,6 +239,10 @@ public abstract class JDBC {
         return false;
     }
 
+    /** Deletes all appointments associated with a customer id from appointments table
+     * @param custId an integer representing the customer id
+     * @return a List with the appointment id of the appointments that were deleted
+     */
     public static List<Integer> deleteAllApptWithCustId(Integer custId) throws Exception {
         String sql = "SELECT Appointment_ID FROM appointments WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
